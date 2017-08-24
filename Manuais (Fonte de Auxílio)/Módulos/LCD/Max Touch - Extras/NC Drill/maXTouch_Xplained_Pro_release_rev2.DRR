@@ -1,0 +1,16 @@
+---------------------------------------------------------------------------
+NCDrill File Report For: maXTouch_Xplained_Pro.PCBDOC   5/6/2014  11:15:25 AM
+---------------------------------------------------------------------------
+
+Layer Pair : Top Layer to Bottom Layer
+ASCII RoundHoles File : maXTouch_Xplained_Pro.TXT
+EIA File   : maXTouch_Xplained_Pro.DRL
+
+Tool         Hole Size           Hole Type     Hole Count Plated       Tool Travel
+---------------------------------------------------------------------------
+T1        0.25mm (9.842mil)        Round          170              658.12 mm (25.91 Inch)
+T2        1mm (39.37mil)           Round          20               53.34 mm (2.10 Inch)
+---------------------------------------------------------------------------
+Totals                                            190              711.46 mm (28.01 Inch)
+
+Total Processing Time (hh:mm:ss) : 00:00:00

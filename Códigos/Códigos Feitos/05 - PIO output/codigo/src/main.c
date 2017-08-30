@@ -166,19 +166,19 @@
 #define OLED_LED_1  ID_PIOD
 #define LED_PIO		PIOD
 #define LED1_BIT		11
-#define LED1_BIT_MASK (1<<LED_PIN)
+#define LED1_BIT_MASK (1<<LED1_BIT)
 
 
 #define OLED_LED_2  ID_PIOC
 #define LED_PIO	    PIOC
 #define LED2_BIT		19
-#define LED2_BIT_MASK (1<<LED_PIN)
+#define LED2_BIT_MASK (1<<LED2_BIT)
 
 
 #define OLED_LED_3  ID_PIOD
 #define LED_PIO	    PIOD
 #define LED3_BIT		26
-#define LED3_BIT_MASK (1<<LED_PIN)
+#define LED3_BIT_MASK (1<<LED3_BIT)
 /************************************************************************/
 /* Main                                                                 */
 /************************************************************************/
@@ -241,9 +241,9 @@ int main(void)
 	//corresponding I/O line is used as an input only. When the bit is at one, the corresponding I/O line is driven by the
 	//PIO Controller (Pg 350 manual)
 	PIOC->PIO_OER = (1 << 8);// Output Enable Register PIOC
-	PIOD->PIO_OER = (1 << 11);// Output Enable Register PIOD
-	PIOC->PIO_OER = (1 << 19);// Output Enable Register PIOC
-	PIOD->PIO_OER = (1 << 26);// Output Enable Register PIOD
+	PIOD->PIO_OER = (LED1_BIT_MASK );// Output Enable Register PIOD
+	PIOC->PIO_OER = (LED2_BIT_MASK );// Output Enable Register PIOC
+	PIOD->PIO_OER = (LED3_BIT_MASK );// Output Enable Register PIOD
 
 	/**
 	* Periférico : PIO C
@@ -255,9 +255,9 @@ int main(void)
 	//(PIO_PER) and the Disable Register (PIO_PDR).). A value of one indicates the pin is controlled by the PIO
 	//Controller(Pg 349 Manual) 
 	PIOC->PIO_PER = (1 << 8);//LED da Placa
-	PIOD->PIO_PER = (1 << 11);//  Enable Register PIOD
-	PIOC->PIO_PER = (1 << 19);//  Enable Register PIOC
-	PIOD->PIO_PER = (1 << 26);//  Enable Register PIOD
+	PIOD->PIO_PER = (LED1_BIT_MASK );//  Enable Register PIOD
+	PIOC->PIO_PER = (LED2_BIT_MASK );//  Enable Register PIOC
+	PIOD->PIO_PER = (LED3_BIT_MASK );//  Enable Register PIOD
 
 	/**
 	* Periférico : PIO  
@@ -280,9 +280,9 @@ int main(void)
 	driven on the I/O line.(Pg 350 Manual)
 	*/
 	PIOC->PIO_CODR = (1 << 8);//LED da Placa
-	PIOD->PIO_CODR = (1 << 11);// Clear Output Data Register PIOD
-	PIOC->PIO_CODR = (1 << 19);// Clear Output Data Register PIOC
-	PIOD->PIO_CODR = (1 << 26);// Clear Output Data Register PIOD
+	PIOD->PIO_CODR = (LED1_BIT_MASK );// Clear Output Data Register PIOD
+	PIOC->PIO_CODR = (LED2_BIT_MASK );// Clear Output Data Register PIOC
+	PIOD->PIO_CODR = (LED3_BIT_MASK );// Clear Output Data Register PIOD
 
 	/************************************************************************/
 	/* Super loop                                                           */
@@ -295,14 +295,14 @@ int main(void)
 	while(1){
 		delay_ms(100);
 			PIOC->PIO_SODR = (1 << 8);// LED placa
-			PIOD->PIO_SODR = (1 << 11);// LED 1 placa OLED
-			PIOC->PIO_SODR = (1 << 14);// LED 2 placa OLED
-			PIOD->PIO_SODR = (1 << 26);// LED 3 placa OLED
+			PIOD->PIO_SODR = (LED1_BIT_MASK);// LED 1 placa OLED
+			PIOC->PIO_SODR = (LED2_BIT_MASK);// LED 2 placa OLED
+			PIOD->PIO_SODR = (LED3_BIT_MASK );// LED 3 placa OLED
 		delay_ms(100);
 			PIOC->PIO_CODR = (1 << 8);
-			PIOD->PIO_CODR = (1 << 11);
-			PIOC->PIO_CODR = (1 << 14);
-			PIOD->PIO_CODR = (1 << 26);
+			PIOD->PIO_CODR = (LED1_BIT_MASK );
+			PIOC->PIO_CODR = (LED2_BIT_MASK );
+			PIOD->PIO_CODR = (LED3_BIT_MASK );
 
 	};
 }

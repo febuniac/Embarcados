@@ -23,6 +23,24 @@
 #define LED_PIN			  8
 #define LED_PIN_MASK	(1<<LED_PIN)
 
+//Criando defines dos LEDs da placa OLED
+#define OLED_LED_1  ID_PIOD
+#define LED_PIO		PIOD
+#define LED1_BIT		11
+#define LED1_BIT_MASK (1<<LED1_BIT)
+
+
+#define OLED_LED_2  ID_PIOC
+#define LED_PIO	    PIOC
+#define LED2_BIT		19
+#define LED2_BIT_MASK (1<<LED2_BIT)
+
+
+#define OLED_LED_3  ID_PIOD
+#define LED_PIO	    PIOD
+#define LED3_BIT		26
+#define LED3_BIT_MASK (1<<LED3_BIT)
+
 /**
  * Botão
  */
@@ -34,6 +52,25 @@
 #define BUT_PIN		    11
 #define BUT_PIN_MASK    (1 << BUT_PIN)
 #define BUT_DEBOUNCING_VALUE  79
+
+//Criando defines dos Botões da placa OLED
+#define BUT_PIO_ID_1  ID_PIOD
+#define BUT_PIO		PIOD
+#define BUT1_BIT		11
+#define BUT1_BIT_MASK (1<<BUT_PIN)
+
+
+#define BUT_PIO_ID_2  ID_PIOD
+#define BUT_PIO		PIOD
+#define BUT2_BIT		19
+#define BUT2_BIT_MASK (1<<BUT_BIT)
+
+
+#define OLED_LED_3  ID_PIOD
+#define LED_PIO	    PIOD
+#define LED3_BIT		26
+#define LED3_BIT_MASK (1<<LED_PIN)
+
 
 /************************************************************************/
 /* Prototipação                                                        */

@@ -163,11 +163,17 @@
 #define LED_PIN			  8
 #define LED_PIN_MASK	(1<<LED_PIN)
 
-//LED externo
+//LED externo ( EXT1 PIO B pino 3 (pino 5 da placa)
 #define LED1_PIO_ID		ID_PIOB
 #define LED1_PIO       PIOB
-#define LED1_PIN			  3
+#define LED1_PIN			  3 
 #define LED1_PIN_MASK	(1<<LED1_PIN)
+
+//LED externo ( EXT1 PIO A pino 6 (pino 5 da placa)
+#define LED2_PIO_ID		ID_PIOA
+#define LED2_PIO       PIOA
+#define LED2_PIN			  6
+#define LED2_PIN_MASK	(1<<LED2_PIN)
 
 //IN 1 do motor no PD 11
 #define IN1  ID_PIOD
@@ -236,6 +242,15 @@ void ledConfig1(int estado){
 	else
 	LED1_PIO->PIO_SODR = LED1_PIN_MASK;       // Coloca 1 na saída                (SET Output Data register)
 };
+void ledConfig2(int estado){
+	PMC->PMC_PCER0    = (1<<LED2_PIO_ID);	    // Ativa clock do periférico no PMC
+	LED2_PIO->PIO_PER  = LED2_PIN_MASK;           // Ativa controle do pino no PIO    (PIO ENABLE register)
+	LED2_PIO->PIO_OER  = LED2_PIN_MASK;           // Ativa saída                      (Output ENABLE register)
+	if(!estado)                                 // Checa pela inicialização desejada
+	LED2_PIO->PIO_CODR = LED2_PIN_MASK;       // Coloca 0 na saída                (CLEAR Output Data register)
+	else
+	LED2_PIO->PIO_SODR = LED2_PIN_MASK;       // Coloca 1 na saída                (SET Output Data register)
+};
 
 
 /************************************************************************/
@@ -265,7 +280,8 @@ int main(void)
 	/************************************************************************/
 	// Configura LED em modo saída
 	ledConfig(1);
-	ledConfig1(0);
+	ledConfig1(1);
+	ledConfig2(1);
 
   /************************************************************************/
 	/* 2. Desativa o watchdog                                               */
@@ -385,15 +401,16 @@ int main(void)
 		 */
 		//PARA BOTÃO DA PLACA E LED
 		if(BUT_PIO->PIO_PDSR & (BUT_PIN_MASK)){//LIGA MOTOR E LED Gira horario
-				IN1_PIO->PIO_SODR = IN1_BIT_MASK;//clear do pino ligado no led(por acaso é um led)
+				IN1_PIO->PIO_CODR = IN1_BIT_MASK;//clear do pino ligado no led(por acaso é um led)
 				IN2_PIO->PIO_CODR = IN2_BIT_MASK;//clear do pino ligado no led(por acaso é um led)
-				PIOB->PIO_SODR = (1<<LED1_PIN);
-				
+				PIOB->PIO_CODR = (1<<LED1_PIN);
+				PIOA->PIO_SODR = (1<<LED2_PIN);
 		}
 			else{//DESLIGA MOTOR E LED
-				IN2_PIO->PIO_CODR = IN2_BIT_MASK;//set do pino  que esta ligado no led(por acaso é um led)
+				IN2_PIO->PIO_SODR = IN2_BIT_MASK;//set do pino  que esta ligado no led(por acaso é um led)
 				IN1_PIO->PIO_CODR = IN1_BIT_MASK;//clear do pino ligado no led(por acaso é um led)
-				PIOB->PIO_CODR = (1<<LED1_PIN);
+				PIOB->PIO_SODR = (1<<LED1_PIN);
+				PIOA->PIO_CODR = (1<<LED2_PIN);
 		}
 		/*
 		//PARA IMÃ

@@ -6683,8 +6683,8 @@ ioport_set_pin_sense_mode(GPIO_PUSH_BUTTON_2, GPIO_PUSH_BUTTON_2_SENSE);
 		}
 
 		/* Wait for 500ms */
-		mdelay(1000);
-  40226a:	f44f 707a 	mov.w	r0, #1000	; 0x3e8
+		mdelay(500);
+  40226a:	f44f 70fa 	mov.w	r0, #500	; 0x1f4
   40226e:	4b14      	ldr	r3, [pc, #80]	; (4022c0 <main+0xd8>)
   402270:	4798      	blx	r3
 	}
@@ -11543,12 +11543,12 @@ ioport_set_pin_sense_mode(GPIO_PUSH_BUTTON_2, GPIO_PUSH_BUTTON_2_SENSE);
   4053d0:	2d2d0a0d 	.word	0x2d2d0a0d
   4053d4:	6d6f4320 	.word	0x6d6f4320
   4053d8:	656c6970 	.word	0x656c6970
-  4053dc:	41203a64 	.word	0x41203a64
-  4053e0:	32206775 	.word	0x32206775
-  4053e4:	30322033 	.word	0x30322033
-  4053e8:	32203731 	.word	0x32203731
-  4053ec:	38353a33 	.word	0x38353a33
-  4053f0:	2038333a 	.word	0x2038333a
+  4053dc:	53203a64 	.word	0x53203a64
+  4053e0:	31207065 	.word	0x31207065
+  4053e4:	30322031 	.word	0x30322031
+  4053e8:	31203731 	.word	0x31203731
+  4053ec:	34333a35 	.word	0x34333a35
+  4053f0:	2034303a 	.word	0x2034303a
   4053f4:	000d2d2d 	.word	0x000d2d2d
   4053f8:	666e6f43 	.word	0x666e6f43
   4053fc:	72756769 	.word	0x72756769

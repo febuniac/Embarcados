@@ -304,7 +304,6 @@ int main(void)
 			desligaIma();
 			desligaLEDverde();
 			piscaLEDvermelho();
-			
 			desligaMotor();
 			
 		}
@@ -318,6 +317,17 @@ int main(void)
 		delay_ms(100);
 	};
 };
+
+
+
+
+
+
+
+
+
+/*
+Comentários para aprenzidado(podem ser ignorados):
 		/*
 		
 		//PARA BOTÃO DA PLACA E LED
@@ -378,3 +388,4 @@ int main(void)
 		ligaLEDvermelho();
 		//mdelay(500);
 	}*/
+*/

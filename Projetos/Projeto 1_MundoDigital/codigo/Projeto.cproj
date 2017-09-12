@@ -13,7 +13,7 @@
     <OutputFileExtension>.elf</OutputFileExtension>
     <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
     <AssemblyName>07-PIO-OUTPUT</AssemblyName>
-    <Name>07-PIO-OUTPUT</Name>
+    <Name>Projeto</Name>
     <RootNamespace>07-PIO-OUTPUT</RootNamespace>
     <ToolchainFlavour>Native</ToolchainFlavour>
     <KeepTimersRunning>true</KeepTimersRunning>

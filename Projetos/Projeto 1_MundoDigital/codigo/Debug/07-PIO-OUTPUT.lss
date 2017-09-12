@@ -1439,7 +1439,7 @@ PIO_CODR : coloca 0 nesse pino*/
 0040077c <piscaLEDvermelho>:
 
 void ligaLEDvermelho(){
-	PIOA->PIO_SODR = (LEDVermelho_PIN_MASK);//1<<LEDVermelho_PIN
+	LEDVermelho_PIO->PIO_SODR = (LEDVermelho_PIN_MASK);//1<<LEDVermelho_PIN
 }
 
 void piscaLEDvermelho(){
@@ -1619,15 +1619,15 @@ void desligaIma(){
 }
 
 void desligaLEDverde(){
-	PIOB->PIO_CODR = (LEDVerde_PIN_MASK);//1<<LEDVerde_PIN
+	LEDVerde_PIO->PIO_CODR = (LEDVerde_PIN_MASK);//1<<LEDVerde_PIN
   40085c:	2208      	movs	r2, #8
   40085e:	f8cb 2034 	str.w	r2, [fp, #52]	; 0x34
 void ligaLEDverde(){
-	PIOB->PIO_SODR = (LEDVerde_PIN_MASK);//1<<LEDVerde_PIN
+	LEDVerde_PIO->PIO_SODR = (LEDVerde_PIN_MASK);//1<<LEDVerde_PIN
 }
 
 void desligaLEDvermelho(){
-	PIOA->PIO_CODR = (LEDVermelho_PIN_MASK);//1<<LEDVermelho_PIN
+	LEDVermelho_PIO->PIO_CODR = (LEDVermelho_PIN_MASK);//1<<LEDVermelho_PIN
   400862:	2340      	movs	r3, #64	; 0x40
   400864:	f8c8 3034 	str.w	r3, [r8, #52]	; 0x34
 
@@ -1669,15 +1669,15 @@ void ligaIma(){
 }
 
 void desligaLEDverde(){
-	PIOB->PIO_CODR = (LEDVerde_PIN_MASK);//1<<LEDVerde_PIN
+	LEDVerde_PIO->PIO_CODR = (LEDVerde_PIN_MASK);//1<<LEDVerde_PIN
   40087e:	2208      	movs	r2, #8
   400880:	635a      	str	r2, [r3, #52]	; 0x34
 void desligaLEDvermelho(){
-	PIOA->PIO_CODR = (LEDVermelho_PIN_MASK);//1<<LEDVermelho_PIN
+	LEDVermelho_PIO->PIO_CODR = (LEDVermelho_PIN_MASK);//1<<LEDVermelho_PIN
 }
 
 void ligaLEDvermelho(){
-	PIOA->PIO_SODR = (LEDVermelho_PIN_MASK);//1<<LEDVermelho_PIN
+	LEDVermelho_PIO->PIO_SODR = (LEDVermelho_PIN_MASK);//1<<LEDVermelho_PIN
   400882:	2340      	movs	r3, #64	; 0x40
   400884:	f8c8 3030 	str.w	r3, [r8, #48]	; 0x30
 		}
@@ -1719,7 +1719,7 @@ void desligaIma(){
 }
 
 void desligaLEDverde(){
-	PIOB->PIO_CODR = (LEDVerde_PIN_MASK);//1<<LEDVerde_PIN
+	LEDVerde_PIO->PIO_CODR = (LEDVerde_PIN_MASK);//1<<LEDVerde_PIN
   40089e:	2208      	movs	r2, #8
   4008a0:	635a      	str	r2, [r3, #52]	; 0x34
 			
@@ -1741,11 +1741,11 @@ void desligaLEDverde(){
   4008ac:	b157      	cbz	r7, 4008c4 <main+0xec>
   4008ae:	b14b      	cbz	r3, 4008c4 <main+0xec>
 void desligaLEDverde(){
-	PIOB->PIO_CODR = (LEDVerde_PIN_MASK);//1<<LEDVerde_PIN
+	LEDVerde_PIO->PIO_CODR = (LEDVerde_PIN_MASK);//1<<LEDVerde_PIN
 }
 
 void ligaLEDverde(){
-	PIOB->PIO_SODR = (LEDVerde_PIN_MASK);//1<<LEDVerde_PIN
+	LEDVerde_PIO->PIO_SODR = (LEDVerde_PIN_MASK);//1<<LEDVerde_PIN
   4008b0:	4c10      	ldr	r4, [pc, #64]	; (4008f4 <main+0x11c>)
   4008b2:	2308      	movs	r3, #8
   4008b4:	6323      	str	r3, [r4, #48]	; 0x30
@@ -1766,11 +1766,11 @@ void ligaIma(){
   4008ba:	2304      	movs	r3, #4
   4008bc:	6323      	str	r3, [r4, #48]	; 0x30
 void ligaLEDverde(){
-	PIOB->PIO_SODR = (LEDVerde_PIN_MASK);//1<<LEDVerde_PIN
+	LEDVerde_PIO->PIO_SODR = (LEDVerde_PIN_MASK);//1<<LEDVerde_PIN
 }
 
 void desligaLEDvermelho(){
-	PIOA->PIO_CODR = (LEDVermelho_PIN_MASK);//1<<LEDVermelho_PIN
+	LEDVermelho_PIO->PIO_CODR = (LEDVermelho_PIN_MASK);//1<<LEDVermelho_PIN
   4008be:	2340      	movs	r3, #64	; 0x40
   4008c0:	f8c8 3034 	str.w	r3, [r8, #52]	; 0x34
 			ligaMotor();

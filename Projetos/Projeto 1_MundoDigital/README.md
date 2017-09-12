@@ -15,7 +15,7 @@ O dispenser tem uma base misturadora que é ativada a partir de 2 entradas: um b
 
 -SAM E70
 
-- 2 LEDs (1 vermelho e 1 verde)
+-2 LEDs (1 vermelho e 1 verde)
 
 -BOTÃO (push button)
 

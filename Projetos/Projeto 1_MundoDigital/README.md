@@ -29,3 +29,4 @@ O dispenser tem uma base misturadora que é ativada a partir de 2 entradas: um b
 ![Screenshot](diagrama.png)
 
 ## Diagrama de Blocos Completo
+![Screenshot](complete.png)

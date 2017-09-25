@@ -65,7 +65,7 @@ void but_init(void){
 	_pmc_enable_periph_clock(BUT_PIO_ID);     // Ativa clock do periférico no PMC
 	BUT_PIO->PIO_ODR	 = BUT_PIN_MASK;        // Desativa saída                   (Output DISABLE register)
 	BUT_PIO->PIO_PER	 = BUT_PIN_MASK;        // Ativa controle do pino no PIO    (PIO ENABLE register)
-	BUT_PIO->PIO_PUER	 = BUT_PIN_MASK;        // Ativa pull-up no PIO             (PullUp ENABLE register)
+	 _pio_pull_up(BUT_PIO, BUT_PIN_MASK, ul_pull_up_enable)//BUT_PIO->PIO_PUER	 = BUT_PIN_MASK;        // Ativa pull-up no PIO             (PullUp ENABLE register)
 	BUT_PIO->PIO_IFER	 = BUT_PIN_MASK;        // Ativa debouncing
 	BUT_PIO->PIO_IFSCER  = BUT_PIN_MASK;        // Ativa clock periferico
 	BUT_PIO->PIO_SCDR	 = BUT_DEBOUNCING_VALUE;// Configura a frequencia do debouncing

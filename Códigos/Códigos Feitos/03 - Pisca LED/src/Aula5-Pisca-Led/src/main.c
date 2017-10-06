@@ -105,7 +105,7 @@
 #define STRING_HEADER "-- Getting Started Example --\r\n" \
 		"-- "BOARD_NAME" --\r\n" \
 		"-- Compiled: "__DATE__" "__TIME__" --"STRING_EOL
-
+int tempo_piscando;//criando váriavel
 /** LED0 blinking control. */
 // [main_var_led0_control]
 volatile bool g_b_led0_active = true;
@@ -142,7 +142,12 @@ static void ProcessButtonEvt(uint8_t uc_button)
 	if (uc_button == 0) {
 		g_b_led0_active = !g_b_led0_active;
 		if (!g_b_led0_active) {
-			ioport_set_pin_level(LED0_GPIO, IOPORT_PIN_LEVEL_HIGH);
+			if(tempo_piscando == 100){
+				tempo_piscando = 2000;//aperta o botão 2 vezes
+				}else{
+				tempo_piscando = 100;
+			}
+			//ioport_set_pin_level(LED0_GPIO, IOPORT_PIN_LEVEL_HIGH);
 		}
 	}
 // [main_button1_evnt_process]
@@ -361,6 +366,7 @@ int main(void)
 	/* Initialize the SAM system */
 	sysclk_init();
 	board_init();
+	tempo_piscando=200;//inicia piscando com essa frequencia com o ms_delay
 //! [main_step_sys_init]
 
 #ifndef BOARD_NO_PUSHBUTTON_2
@@ -425,7 +431,7 @@ ioport_set_pin_sense_mode(GPIO_PUSH_BUTTON_2, GPIO_PUSH_BUTTON_2_SENSE);
 		}
 
 		/* Wait for 500ms */
-		mdelay(500);
+		mdelay(tempo_piscando);
 	}
 //! [main_step_loop]
 }

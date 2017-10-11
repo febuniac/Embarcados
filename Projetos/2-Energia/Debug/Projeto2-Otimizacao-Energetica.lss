@@ -5986,7 +5986,7 @@ void TC1_init(void){
   401ef8:	4798      	blx	r3
 
     /** Configura o TC para operar em  4Mhz e interrupçcão no RC compare */
-    tc_find_mck_divisor(12, ul_sysclk, &ul_div, &ul_tcclks, ul_sysclk);// troquei de 4 mhz para 12
+    tc_find_mck_divisor(12, ul_sysclk, &ul_div, &ul_tcclks, ul_sysclk);// troquei de 4 mhz para 1
   401efa:	4639      	mov	r1, r7
   401efc:	1d3a      	adds	r2, r7, #4
   401efe:	68fb      	ldr	r3, [r7, #12]
@@ -6229,7 +6229,7 @@ int main(void){
 	sysclk_init();
   402098:	4b09      	ldr	r3, [pc, #36]	; (4020c0 <main+0x2c>)
   40209a:	4798      	blx	r3
-
+	
 	/* Disable the watchdog */
 	WDT->WDT_MR = WDT_MR_WDDIS;
   40209c:	4b09      	ldr	r3, [pc, #36]	; (4020c4 <main+0x30>)

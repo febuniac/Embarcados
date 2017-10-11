@@ -127,7 +127,7 @@ void TC1_init(void){
     pmc_enable_periph_clk(ID_TC1);    
 
     /** Configura o TC para operar em  4Mhz e interrupçcão no RC compare */
-    tc_find_mck_divisor(12, ul_sysclk, &ul_div, &ul_tcclks, ul_sysclk);// troquei de 4 mhz para 12
+    tc_find_mck_divisor(12, ul_sysclk, &ul_div, &ul_tcclks, ul_sysclk);// troquei de 4 mhz para 1
     tc_init(TC0, channel, ul_tcclks | TC_CMR_CPCTRG);
     tc_write_rc(TC0, channel, (ul_sysclk / ul_div) /12);//faz piscar mais rápido ou mais lento (divisor decide)
 
@@ -197,7 +197,7 @@ static void USART1_init(void){
 int main(void){
 	/* Initialize the SAM system */
 	sysclk_init();
-
+	
 	/* Disable the watchdog */
 	WDT->WDT_MR = WDT_MR_WDDIS;
 

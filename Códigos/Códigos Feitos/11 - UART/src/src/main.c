@@ -76,7 +76,7 @@ void USART1_Handler(void){//para fazer funcóes não blocantes
 				pstring[character++] = c;
 			}
 		else{
-			//c =='\n';
+			pstring[character] = NULL;
 			flag = 1;
 		}	
   }

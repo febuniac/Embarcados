@@ -64,6 +64,7 @@ void TC1_Handler(void){
 	UNUSED(ul_dummy);
 
 	/** Muda o estado do LED */
+  	 
   pin_toggle(LED_PIO, LED_PIN_MASK);
     
  }
@@ -127,13 +128,13 @@ void TC1_init(void){
     pmc_enable_periph_clk(ID_TC1);    
 
     /** Configura o TC para operar em  4Mhz e interrupçcão no RC compare */
-    tc_find_mck_divisor(12, ul_sysclk, &ul_div, &ul_tcclks, ul_sysclk);// troquei de 4 mhz para 1
-    tc_init(TC0, channel, ul_tcclks | TC_CMR_CPCTRG);
-    tc_write_rc(TC0, channel, (ul_sysclk / ul_div) /12);//faz piscar mais rápido ou mais lento (divisor decide)
-
+    tc_find_mck_divisor(2, ul_sysclk, &ul_div, &ul_tcclks, ul_sysclk);// pisca a cada meio segundo T =1/f f = 1/t t=1/2
+    tc_init(TC0, channel, ul_tcclks | TC_CMR_WAVE);//mudando modo de operação
+    tc_write_rc(TC0, channel, (ul_sysclk / ul_div) /93);//faz piscar mais rápido ou mais lento (divisor decide)
+	tc_write_ra(TC0,channel,(ul_sysclk/ul_div)/94 );//mudanca de interrupcao do RA  (pg1386)
     /* Configura e ativa interrupçcão no TC canal 0 */
     NVIC_EnableIRQ((IRQn_Type) ID_TC1);
-    tc_enable_interrupt(TC0, channel, TC_IER_CPCS);
+	tc_enable_interrupt(TC0, channel, (TC_IER_CPCS)|(TC_IER_CPAS));//concatenando as interrupcoes de RA e RC 
 
     /* Inicializa o canal 0 do TC */
     tc_start(TC0, channel);
@@ -209,13 +210,13 @@ int main(void){
   TC1_init();
     
   /** Configura RTC */
-  RTC_init();
+  //RTC_init();
   
   /** Inicializa USART como printf */
   USART1_init();
   
 	while (1) {
-		 pmc_enable_sleepmode(0);//dorme enquanto o RTC Handler não é chamado
+		 pmc_enable_sleepmode(0);//dorme enquanto o TC Handler não é chamado
 	}
 
 }

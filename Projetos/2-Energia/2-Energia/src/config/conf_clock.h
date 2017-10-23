@@ -66,7 +66,7 @@
 //#define CONFIG_SYSCLK_PRES          SYSCLK_PRES_8
 //#define CONFIG_SYSCLK_PRES          SYSCLK_PRES_16
 //#define CONFIG_SYSCLK_PRES          SYSCLK_PRES_32
-#define CONFIG_SYSCLK_PRES          SYSCLK_PRES_64
+#define CONFIG_SYSCLK_PRES          SYSCLK_PRES_64//mudei
 //#define CONFIG_SYSCLK_PRES          SYSCLK_PRES_3
 
 // ===== System Clock (MCK) Division Options     (Fmck = Fhclk / (SYSCLK_DIV))

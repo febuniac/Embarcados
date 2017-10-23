@@ -84,12 +84,12 @@ SUBDIRS :=  \
 ../src/ASF/sam/utils/preprocessor/ \
 ../src/ASF/sam/utils/syscalls/ \
 ../src/ASF/sam/utils/syscalls/gcc/ \
-../src/ASF/thirdparty/ \
-../src/ASF/thirdparty/CMSIS/ \
-../src/ASF/thirdparty/CMSIS/Include/ \
-../src/ASF/thirdparty/CMSIS/Lib/ \
-../src/ASF/thirdparty/CMSIS/Lib/GCC/ \
-../src/config/
+../src/config/ \
+../src/config/thirdparty/ \
+../src/config/thirdparty/CMSIS/ \
+../src/config/thirdparty/CMSIS/Include/ \
+../src/config/thirdparty/CMSIS/Lib/ \
+../src/config/thirdparty/CMSIS/Lib/GCC/
 
 
 # Add inputs and outputs from these tool invocations to the build variables 

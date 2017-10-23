@@ -35,15 +35,26 @@
 /* VAR globais                                                          */
 /************************************************************************/
 volatile bool g_ledBlinkOn = false;
-
+uint8_t *pstring;
+ uint32_t character =0;
+ /* buffer para recebimento de dados */
+ uint8_t bufferRX[100];
+  
+ /* buffer para transmissão de dados */
+ uint8_t bufferTX[100];
+ 
+ volatile uint8_t flag_led0 = 0;//variável global que faz a  decisão se o LED está em modo “pisca pisca"
 /************************************************************************/
 /* PROTOTYPES                                                           */
 /************************************************************************/
 
 void LED_init(int estado);
 void TC1_init(void);
-void RTC_init(void);
+//void RTC_init(void);
 void pin_toggle(Pio *pio, uint32_t mask);
+//USART
+uint32_t usart_puts(uint8_t *pstring);
+uint32_t usart_gets(uint8_t *pstring);
 
 /************************************************************************/
 /* Handlers                                                             */
@@ -142,28 +153,30 @@ void TC1_init(void){
 
 /**
  * Configura o RTC para funcionar com interrupcao de alarme
- */
+ 
+
 void RTC_init(){
-    /* Configura o PMC */
+    //Configura o PMC 
     pmc_enable_periph_clk(ID_RTC);
         
-    /* Default RTC configuration, 24-hour mode */
+    //Default RTC configuration, 24-hour mode 
     rtc_set_hour_mode(RTC, 0);
 
-    /* Configura data e hora manualmente */
+    //Configura data e hora manualmente
     rtc_set_date(RTC, YEAR, MOUNTH, DAY, WEEK);
     rtc_set_time(RTC, HOUR, MINUTE, SECOND);
 
-    /* Configure RTC interrupts */
+    //Configure RTC interrupts
     NVIC_DisableIRQ(RTC_IRQn);
     NVIC_ClearPendingIRQ(RTC_IRQn);
     NVIC_SetPriority(RTC_IRQn, 0);
     NVIC_EnableIRQ(RTC_IRQn);
     
-    /* Ativa interrupcao via alarme */
+    //Ativa interrupcao via alarme
     rtc_enable_interrupt(RTC,  RTC_IER_ALREN); 
     
 }
+*/
 
 /**
  * \brief Configure UART console.
@@ -185,19 +198,50 @@ static void USART1_init(void){
     .stop_bits    = US_MR_NBSTOP_1_BIT    ,
     .channel_mode = US_MR_CHMODE_NORMAL
   };
+ /* Ativa Clock periferico USART0 */
+  sysclk_enable_peripheral_clock(USART_COM_ID);
 
-  /* Ativa Clock periferico USART0 */
-  sysclk_enable_peripheral_clock(USART_COM_ID); 
- 	stdio_serial_init(CONF_UART, &usart_settings);
+  /* Configura USART para operar em modo RS232 */
+  usart_init_rs232(USART_COM, &usart_settings, sysclk_get_peripheral_hz());
+
+  /* Enable the receiver and transmitter. */
+  usart_enable_tx(USART_COM);
+  usart_enable_rx(USART_COM);
 
  }
+/**
+ *  Envia para o UART uma string
+ */
+uint32_t usart_puts(uint8_t *pstring){
+  uint32_t i = 0 ;
 
+  while(*(pstring + i)){
+    usart_serial_putchar(USART_COM, *(pstring+i++));
+    while(!uart_is_tx_empty(USART_COM)){};
+  }
+  return(i);
+}
+
+/**
+ * Busca do UART uma mensagem enviada pelo computador terminada em \n
+ */
+uint32_t usart_gets(uint8_t *pstring){
+  uint32_t i = 0 ;
+  usart_serial_getchar(USART_COM, (pstring+i));
+  while(*(pstring+i) != '\n'){
+    usart_serial_getchar(USART_COM, (pstring+(++i)));
+  }
+  *(pstring+i+1)= 0x00;
+  return(i);
+
+}
 /************************************************************************/
 /* Main Code	                                                        */
 /************************************************************************/
 int main(void){
 	/* Initialize the SAM system */
 	sysclk_init();
+	char str[10];
 	
 	/* Disable the watchdog */
 	WDT->WDT_MR = WDT_MR_WDDIS;
@@ -217,6 +261,21 @@ int main(void){
   
 	while (1) {
 		 pmc_enable_sleepmode(0);//dorme enquanto o TC Handler não é chamado
+	   usart_gets(str);
+    
+    if(str[0] == 'm'){
+      usart_puts("Menu: m- aparece menu \n l-pisca led \n  o- desliga led \n");
+      usart_puts(bufferRX);   
+    }
+    
+    else if (str[0] == 'l') {
+      usart_puts("Olhe! O LED pisca!!! \n");
+      flag_led0 = 1;
+    }
+    
+    else if (str[0] == 'o') {
+      usart_puts("Parou de Piscar \n!");
+      flag_led0 = 0;
+  }
 	}
-
 }

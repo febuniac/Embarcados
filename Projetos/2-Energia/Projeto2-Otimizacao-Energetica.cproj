@@ -39,8 +39,11 @@
           <option id="sam.drivers.mpu" value="Add" config="" content-id="Atmel.ASF" />
           <option id="sam.drivers.pio" value="Add" config="" content-id="Atmel.ASF" />
           <option id="sam.drivers.pmc" value="Add" config="" content-id="Atmel.ASF" />
-          <option id="sam.drivers.tc" value="Add" config="" content-id="Atmel.ASF" />
           <option id="sam.drivers.rtc" value="Add" config="" content-id="Atmel.ASF" />
+          <option id="sam.drivers.tc" value="Add" config="" content-id="Atmel.ASF" />
+          <option id="sam.drivers.uart" value="Add" config="" content-id="Atmel.ASF" />
+          <option id="common.services.basic.serial" value="Add" config="" content-id="Atmel.ASF" />
+          <option id="sam.drivers.usart" value="Add" config="" content-id="Atmel.ASF" />
           <option id="sam.applications.getting-started" value="Add" config="" content-id="Atmel.ASF" />
           <option id="sam.utils.cmsis.same70.source.template" value="Add" config="" content-id="Atmel.ASF" />
         </options>
@@ -614,12 +617,12 @@
     <Folder Include="src\ASF\sam\utils\preprocessor\" />
     <Folder Include="src\ASF\sam\utils\syscalls\" />
     <Folder Include="src\ASF\sam\utils\syscalls\gcc\" />
-    <Folder Include="src\ASF\thirdparty\" />
-    <Folder Include="src\ASF\thirdparty\CMSIS\" />
-    <Folder Include="src\ASF\thirdparty\CMSIS\Include\" />
-    <Folder Include="src\ASF\thirdparty\CMSIS\Lib\" />
-    <Folder Include="src\ASF\thirdparty\CMSIS\Lib\GCC\" />
     <Folder Include="src\config\" />
+    <Folder Include="src\config\thirdparty\" />
+    <Folder Include="src\config\thirdparty\CMSIS\" />
+    <Folder Include="src\config\thirdparty\CMSIS\Include\" />
+    <Folder Include="src\config\thirdparty\CMSIS\Lib\" />
+    <Folder Include="src\config\thirdparty\CMSIS\Lib\GCC\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\asf.h">
@@ -670,15 +673,6 @@
     <None Include="src\ASF\sam\utils\make\Makefile.sam.in">
       <SubType>compile</SubType>
     </None>
-    <None Include="src\ASF\thirdparty\CMSIS\ATMEL-disclaimer.txt">
-      <SubType>compile</SubType>
-    </None>
-    <None Include="src\ASF\thirdparty\CMSIS\CMSIS_END_USER_LICENCE_AGREEMENT.pdf">
-      <SubType>compile</SubType>
-    </None>
-    <None Include="src\ASF\thirdparty\CMSIS\Include\arm_const_structs.h">
-      <SubType>compile</SubType>
-    </None>
     <None Include="src\ASF\sam\utils\cmsis\same70\include\instance\spi1.h">
       <SubType>compile</SubType>
     </None>
@@ -716,9 +710,6 @@
       <SubType>compile</SubType>
     </None>
     <None Include="src\ASF\sam\utils\cmsis\same70\include\pio\same70q21.h">
-      <SubType>compile</SubType>
-    </None>
-    <None Include="src\ASF\thirdparty\CMSIS\Include\core_cmInstr.h">
       <SubType>compile</SubType>
     </None>
     <None Include="src\ASF\sam\utils\cmsis\same70\include\component\wdt.h">
@@ -859,13 +850,7 @@
     <None Include="src\ASF\sam\utils\preprocessor\tpaste.h">
       <SubType>compile</SubType>
     </None>
-    <None Include="src\ASF\thirdparty\CMSIS\Include\core_cmSimd.h">
-      <SubType>compile</SubType>
-    </None>
     <None Include="src\ASF\common\utils\interrupt\interrupt_sam_nvic.h">
-      <SubType>compile</SubType>
-    </None>
-    <None Include="src\ASF\thirdparty\CMSIS\Include\arm_common_tables.h">
       <SubType>compile</SubType>
     </None>
     <None Include="src\ASF\common\services\gpio\gpio.h">
@@ -892,16 +877,10 @@
     <None Include="src\ASF\sam\utils\cmsis\same70\include\component\rswdt.h">
       <SubType>compile</SubType>
     </None>
-    <None Include="src\ASF\thirdparty\CMSIS\Include\core_cmFunc.h">
-      <SubType>compile</SubType>
-    </None>
     <None Include="src\ASF\common\services\clock\sysclk.h">
       <SubType>compile</SubType>
     </None>
     <None Include="src\ASF\sam\utils\cmsis\same70\include\component\gmac.h">
-      <SubType>compile</SubType>
-    </None>
-    <None Include="src\ASF\thirdparty\CMSIS\Include\core_cm7.h">
       <SubType>compile</SubType>
     </None>
     <None Include="src\ASF\common\boards\board.h">
@@ -1016,9 +995,6 @@
       <SubType>compile</SubType>
     </None>
     <None Include="src\ASF\sam\utils\cmsis\same70\include\instance\usart1.h">
-      <SubType>compile</SubType>
-    </None>
-    <None Include="src\ASF\thirdparty\CMSIS\Include\arm_math.h">
       <SubType>compile</SubType>
     </None>
     <None Include="src\ASF\sam\utils\cmsis\same70\include\instance\pioe.h">
@@ -1180,19 +1156,46 @@
     <None Include="src\config\conf_sleepmgr.h">
       <SubType>compile</SubType>
     </None>
+    <Compile Include="src\config\thirdparty\CMSIS\Include\arm_common_tables.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\config\thirdparty\CMSIS\Include\arm_const_structs.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\config\thirdparty\CMSIS\Include\arm_math.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\config\thirdparty\CMSIS\Include\core_cm7.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\config\thirdparty\CMSIS\Include\core_cmFunc.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\config\thirdparty\CMSIS\Include\core_cmInstr.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\config\thirdparty\CMSIS\Include\core_cmSimd.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\main.c">
       <SubType>compile</SubType>
     </Compile>
-    <None Include="src\ASF\thirdparty\CMSIS\Lib\GCC\libarm_cortexM7lfsp_math.a">
+    <None Include="src\config\thirdparty\CMSIS\ATMEL-disclaimer.txt">
       <SubType>compile</SubType>
     </None>
-    <None Include="src\ASF\thirdparty\CMSIS\Lib\GCC\libarm_cortexM7lfsp_math_softfp.a">
+    <None Include="src\config\thirdparty\CMSIS\CMSIS_END_USER_LICENCE_AGREEMENT.pdf">
       <SubType>compile</SubType>
     </None>
-    <None Include="src\ASF\thirdparty\CMSIS\Lib\license.txt">
+    <None Include="src\config\thirdparty\CMSIS\Lib\GCC\libarm_cortexM7lfsp_math.a">
       <SubType>compile</SubType>
     </None>
-    <None Include="src\ASF\thirdparty\CMSIS\README.txt">
+    <None Include="src\config\thirdparty\CMSIS\Lib\GCC\libarm_cortexM7lfsp_math_softfp.a">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="src\config\thirdparty\CMSIS\Lib\license.txt">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="src\config\thirdparty\CMSIS\README.txt">
       <SubType>compile</SubType>
     </None>
   </ItemGroup>

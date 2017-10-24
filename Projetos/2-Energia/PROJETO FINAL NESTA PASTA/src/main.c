@@ -4,18 +4,7 @@
 /* DEFINES                                                              */
 /************************************************************************/
 
-/**
- *  Informacoes para o RTC
- *  poderia ser extraida do __DATE__ e __TIME__
- *  ou ser atualizado pelo PC.
- */
-#define YEAR        2017
-#define MOUNTH      3
-#define DAY         27
-#define WEEK        13
-#define HOUR        9
-#define MINUTE      5
-#define SECOND      0
+
 
 /**
  * LEDs
@@ -80,26 +69,7 @@ void TC1_Handler(void){
     
  }
 
-/**
- * \brief Interrupt handler for the RTC. Refresh the display.
- */
-void RTC_Handler(void)
-{
-	uint32_t ul_status = rtc_get_status(RTC);
 
-	/* Second increment interrupt */
-	if ((ul_status & RTC_SR_SEC) == RTC_SR_SEC) {
-	
-		rtc_clear_status(RTC, RTC_SCCR_SECCLR);
-
-	} else {
-		/* Time or date alarm */
-		if ((ul_status & RTC_SR_ALARM) == RTC_SR_ALARM) {
-      
-			rtc_clear_status(RTC, RTC_SCCR_ALRCLR);
-		}
-	}
-}
 
 
 /************************************************************************/
@@ -151,32 +121,6 @@ void TC1_init(void){
     tc_start(TC0, channel);
 }
 
-/**
- * Configura o RTC para funcionar com interrupcao de alarme
- 
-
-void RTC_init(){
-    //Configura o PMC 
-    pmc_enable_periph_clk(ID_RTC);
-        
-    //Default RTC configuration, 24-hour mode 
-    rtc_set_hour_mode(RTC, 0);
-
-    //Configura data e hora manualmente
-    rtc_set_date(RTC, YEAR, MOUNTH, DAY, WEEK);
-    rtc_set_time(RTC, HOUR, MINUTE, SECOND);
-
-    //Configure RTC interrupts
-    NVIC_DisableIRQ(RTC_IRQn);
-    NVIC_ClearPendingIRQ(RTC_IRQn);
-    NVIC_SetPriority(RTC_IRQn, 0);
-    NVIC_EnableIRQ(RTC_IRQn);
-    
-    //Ativa interrupcao via alarme
-    rtc_enable_interrupt(RTC,  RTC_IER_ALREN); 
-    
-}
-*/
 
 /**
  * \brief Configure UART console.
@@ -252,8 +196,6 @@ int main(void){
   /** Configura timer 0 */
   TC1_init();
     
-  /** Configura RTC */
-  //RTC_init();
   
   /** Inicializa USART como printf */
   USART1_init();

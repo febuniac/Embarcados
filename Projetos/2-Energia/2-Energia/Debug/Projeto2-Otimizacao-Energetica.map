@@ -510,7 +510,7 @@ Discarded input sections
  .debug_macro   0x00000000       0x3a src/ASF/common/services/serial/usart_serial.o
  .debug_macro   0x00000000       0x28 src/ASF/common/services/serial/usart_serial.o
  .debug_line    0x00000000      0xc65 src/ASF/common/services/serial/usart_serial.o
- .debug_str     0x00000000    0x85516 src/ASF/common/services/serial/usart_serial.o
+ .debug_str     0x00000000    0x85512 src/ASF/common/services/serial/usart_serial.o
  .comment       0x00000000       0x5a src/ASF/common/services/serial/usart_serial.o
  .debug_frame   0x00000000       0xa0 src/ASF/common/services/serial/usart_serial.o
  .ARM.attributes
@@ -1989,7 +1989,7 @@ Discarded input sections
  .debug_macro   0x00000000       0x82 src/ASF/sam/boards/same70_xplained/init.o
  .debug_macro   0x00000000       0x94 src/ASF/sam/boards/same70_xplained/init.o
  .debug_line    0x00000000      0xd5e src/ASF/sam/boards/same70_xplained/init.o
- .debug_str     0x00000000    0x86091 src/ASF/sam/boards/same70_xplained/init.o
+ .debug_str     0x00000000    0x8608d src/ASF/sam/boards/same70_xplained/init.o
  .comment       0x00000000       0x5a src/ASF/sam/boards/same70_xplained/init.o
  .debug_frame   0x00000000      0x19c src/ASF/sam/boards/same70_xplained/init.o
  .ARM.attributes
@@ -7116,31 +7116,31 @@ OUTPUT(Projeto2-Otimizacao-Energetica.elf elf32-littlearm)
  .debug_line    0x00007d42      0x819 src/ASF/sam/utils/cmsis/same70/source/templates/system_same70.o
  .debug_line    0x0000855b     0x1035 src/main.o
 
-.debug_str      0x00000000    0x89da9
- .debug_str     0x00000000    0x84d0b src/ASF/common/services/clock/same70/sysclk.o
-                              0x85355 (size before relaxing)
- .debug_str     0x00084d0b       0x94 src/ASF/common/utils/interrupt/interrupt_sam_nvic.o
+.debug_str      0x00000000    0x89df7
+ .debug_str     0x00000000    0x84d07 src/ASF/common/services/clock/same70/sysclk.o
+                              0x85351 (size before relaxing)
+ .debug_str     0x00084d07       0xe6 src/ASF/common/utils/interrupt/interrupt_sam_nvic.o
                               0x814d2 (size before relaxing)
- .debug_str     0x00084d9f      0xb31 src/ASF/sam/drivers/pio/pio.o
+ .debug_str     0x00084ded      0xb31 src/ASF/sam/drivers/pio/pio.o
                               0x82028 (size before relaxing)
- .debug_str     0x000858d0      0x59e src/ASF/sam/drivers/pio/pio_handler.o
+ .debug_str     0x0008591e      0x59e src/ASF/sam/drivers/pio/pio_handler.o
                               0x82099 (size before relaxing)
- .debug_str     0x00085e6e      0x7c2 src/ASF/sam/drivers/pmc/pmc.o
+ .debug_str     0x00085ebc      0x7c2 src/ASF/sam/drivers/pmc/pmc.o
                               0x8217d (size before relaxing)
- .debug_str     0x00086630      0x33e src/ASF/sam/drivers/rtc/rtc.o
+ .debug_str     0x0008667e      0x33e src/ASF/sam/drivers/rtc/rtc.o
                               0x817c4 (size before relaxing)
- .debug_str     0x0008696e      0x2e2 src/ASF/sam/drivers/tc/tc.o
+ .debug_str     0x000869bc      0x2e2 src/ASF/sam/drivers/tc/tc.o
                               0x817e5 (size before relaxing)
- .debug_str     0x00086c50      0x2fa src/ASF/sam/drivers/uart/uart.o
+ .debug_str     0x00086c9e      0x2fa src/ASF/sam/drivers/uart/uart.o
                               0x81782 (size before relaxing)
- .debug_str     0x00086f4a      0xb5b src/ASF/sam/drivers/usart/usart.o
+ .debug_str     0x00086f98      0xb5b src/ASF/sam/drivers/usart/usart.o
                               0x8201a (size before relaxing)
- .debug_str     0x00087aa5      0x688 src/ASF/sam/utils/cmsis/same70/source/templates/gcc/startup_same70.o
+ .debug_str     0x00087af3      0x688 src/ASF/sam/utils/cmsis/same70/source/templates/gcc/startup_same70.o
                               0x81c78 (size before relaxing)
- .debug_str     0x0008812d      0x1aa src/ASF/sam/utils/cmsis/same70/source/templates/system_same70.o
+ .debug_str     0x0008817b      0x1aa src/ASF/sam/utils/cmsis/same70/source/templates/system_same70.o
                               0x726af (size before relaxing)
- .debug_str     0x000882d7     0x1ad2 src/main.o
-                              0x879d6 (size before relaxing)
+ .debug_str     0x00088325     0x1ad2 src/main.o
+                              0x879d2 (size before relaxing)
 
 .debug_frame    0x00000000     0x3314
  .debug_frame   0x00000000      0x240 src/ASF/common/services/clock/same70/sysclk.o

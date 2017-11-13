@@ -59,10 +59,10 @@ extern "C" {
 #define IPV4_BYTE(val, index)               ((val >> (index * 8)) & 0xFF)
 
 /** Send buffer of TCP socket. */
-#define MAIN_PREFIX_BUFFER                  "GET / HTTP/1.1 \r\nHost: 10.201.17.248 \r\nAccept: */*\r\n\r\n" // meu server
+#define MAIN_PREFIX_BUFFER                 "GET /set1 HTTP/1.1\r\n Accept: */*\r\n\r\n" // meu server
 
 /** Weather information provider server. */
-#define MAIN_SERVER_NAME                    "10.201.17.248"//ip da minha máquina (ipconfig no terminal)
+#define MAIN_SERVER_NAME                    "192.168.0.121"//ip da minha máquina (ipconfig no terminal)
 
 /** Receive buffer size. */
 #define MAIN_WIFI_M2M_BUFFER_SIZE           1400

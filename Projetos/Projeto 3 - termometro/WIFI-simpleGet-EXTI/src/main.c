@@ -96,6 +96,8 @@
 #include "driver/include/m2m_wifi.h"
 #include "socket/include/socket.h"
 
+
+
 #define STRING_EOL    "\r\n"
 #define STRING_HEADER "-- WINC1500 weather client example --"STRING_EOL	\
 	"-- "BOARD_NAME " --"STRING_EOL	\
@@ -122,6 +124,12 @@ static bool gbTcpConnection = false;
 /** Server host name. */
 static char server_host_name[] = MAIN_SERVER_NAME;
 
+uint8_t stop = 0;
+//Variavéis que salvam minha temperaturas
+ uint8_t Temp1;
+uint8_t Temp2;
+uint8_t Temp3;
+char valor [5];
 
 /**
  * \brief Configure UART console.
@@ -242,10 +250,11 @@ static void socket_cb(SOCKET sock, uint8_t u8Msg, void *pvMsg)
 				sprintf((char *)gau8ReceivedBuffer, "%s", MAIN_PREFIX_BUFFER);
 				tstrSocketConnectMsg *pstrConnect = (tstrSocketConnectMsg *)pvMsg;
 				if (pstrConnect && pstrConnect->s8Error >= SOCK_ERR_NO_ERROR) {
-					printf("send : %d",gau8ReceivedBuffer );
+					printf("send : %d \n",gau8ReceivedBuffer );
 					send(tcp_client_socket, gau8ReceivedBuffer, strlen((char *)gau8ReceivedBuffer), 0);
 					memset(gau8ReceivedBuffer, 0, MAIN_WIFI_M2M_BUFFER_SIZE);
 					recv(tcp_client_socket, &gau8ReceivedBuffer[0], MAIN_WIFI_M2M_BUFFER_SIZE, 0);
+
 					printf("%s",gau8ReceivedBuffer);
 				} else {
 					printf("socket_cb: connect error!\r\n");
@@ -264,12 +273,35 @@ static void socket_cb(SOCKET sock, uint8_t u8Msg, void *pvMsg)
 
 			tstrSocketRecvMsg *pstrRecv = (tstrSocketRecvMsg *)pvMsg;
 			if (pstrRecv && pstrRecv->s16BufferSize > 0) {
-				printf(pstrRecv->pu8Buffer);
-				
-				memset(gau8ReceivedBuffer, 0, sizeof(gau8ReceivedBuffer));
-				recv(tcp_client_socket, &gau8ReceivedBuffer[0], MAIN_WIFI_M2M_BUFFER_SIZE, 0);
-								printf(gau8ReceivedBuffer);
+				printf(pstrRecv->pu8Buffer);	
+				for (int i =0; i< pstrRecv->s16BufferSize ;i++)
+				{
+					if (pstrRecv->pu8Buffer[i] =='$')
+					{		
+						valor[0]=pstrRecv->pu8Buffer[i+5];
+						valor[1]=pstrRecv->pu8Buffer[i+6];
+						valor[2]=NULL;
+						Temp1= atoi(valor);
+						printf("valor: %s \n ",valor);
+						printf("temp1 = %d \n", Temp1);
+					}
+				}
+				//printf(pstrRecv->pu8Buffer);
+				//const char needle[10] = "Temp2";
+				//char *ret;
+				//   printf("aquuiii \n");
+				//
+				//   ret = strstr(pstrRecv->pu8Buffer, needle);
+				//
+				//   printf("The substring is: %s\n", ret);
 
+				//printf(pstrRecv->pu8Buffer);
+				
+				if(stop == 0){
+					recv(tcp_client_socket, &gau8ReceivedBuffer[0], MAIN_WIFI_M2M_BUFFER_SIZE, 0);
+					stop = 1;
+				}
+				memset(gau8ReceivedBuffer, 0, sizeof(gau8ReceivedBuffer));
 			} else {
 				printf("socket_cb: recv error!\r\n");
 				close(tcp_client_socket);

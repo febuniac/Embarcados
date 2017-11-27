@@ -43,25 +43,31 @@ def submittemp():
     return render_template("done.html")
 #fun var
 
-filepath = os.path.join(os.path.dirname(__file__),'tempList.csv')
 
-open_read = open(filepath,'r')
-page =''
-
-while True:
-	read_data = open_read.readline()
-	page += '<p>%s</p>' % read_data
-	mylist = page.split(',')
-	if open_read.readline() == '':
-		break
+def leitura():
+	global mylist
+	global page
+	filepath = os.path.join(os.path.dirname(__file__),'tempList.csv')
+	open_read = open(filepath,'r')
+	page =''
+	while True:
+		read_data = open_read.readline()
+		page += '<p>%s</p>' % read_data
+		mylist = page.split(',')
+		if open_read.readline() == '':
+			break
+leitura()
 @app.route("/temp1")
 def temp1():
+	leitura()
 	return mylist[0] 
 @app.route("/temp2")
 def temp2():
+	leitura()
 	return mylist[1] 
 @app.route("/temp3")
 def temp3():
+	leitura()
 	return mylist[2] 
 @app.route("/temperatures")
 def temperatures():

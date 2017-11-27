@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<style>
+input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type=textred] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+   	border-left: 6px solid red;
+    background-color: lightgrey;
+    border-radius: 4px;
+}
+input[type=textyellow] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border-left: 6px solid yellow;
+    background-color: lightgrey;
+    border-radius: 4px;
+}
+input[type=textgreen] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+   	border-left: 6px solid green;
+    background-color: lightgrey;
+    border-radius: 4px;
+}
+
+input[type=submit] {
+    width: 100%;
+    background-color: #000000;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type=submit]:hover {
+    background-color: #4863A0;
+}
+
+div {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;	
+}
+</style>
+<body>
+
+<h3>Setting up your Termometer</h3>
+
+<div>
+  <form action="{{ url_for('submittemp') }}">
+    <label for="fname">Free Temperature</label>
+    <input type="textgreen" id="fname" name="firstname" placeholder="Green light will show up ...">
+
+    <label for="lname">Warning Temperature</label>
+    <input type="textyellow" id="lname" name="lastname" placeholder="Yellow light will show up ...">
+
+
+    <label for="fname">Emergency Temperature</label>
+    <input type="textred" id="fname" name="firstname" placeholder="Red light will show up ...">
+
+
+  
+    <input type="submit" value="Set Up!">
+  </form>
+</div>
+
+</body>
+</html>

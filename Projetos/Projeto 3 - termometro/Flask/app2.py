@@ -40,7 +40,16 @@ def login():
     # was GET or the credentials were invalid
     return render_template('login.html', error=error)
 
-    	
+# @app.route('/quiz')
+# def quiz():
+#     return render_template('quiz.html')
+
+# @app.route('/quiz_answers', methods=['POST'])
+# def quiz_answers():
+#     q1 = request.form['q1']
+#     q2 = request.form['q2']
+#     q4 = request.form['q4']
+#     q5 = request.form['q5']        	
 
 
 #class TodoSimple(Resource):
@@ -56,6 +65,7 @@ api.add_resource(HelloWorld, '/')
 api.add_resource(Rangeset1, '/set1')
 api.add_resource(Rangeset2, '/set2')
 api.add_resource(submit, '/hi')
+#api.add_resource(quiz, '/quiz')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True)

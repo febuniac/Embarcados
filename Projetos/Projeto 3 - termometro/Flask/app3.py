@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template
 from flask_restful import Resource, Api
 import csv
+import os
 app = Flask(__name__)
 api = Api(app)
 
@@ -40,8 +41,32 @@ def submittemp():
         # And you return a text or a template, but if you don't return anything
         # this code will never work.
     return render_template("done.html")
-    
-#api.add_resource(index, '/')
+#fun var
+
+filepath = os.path.join(os.path.dirname(__file__),'tempList.csv')
+
+open_read = open(filepath,'r')
+page =''
+
+while True:
+	read_data = open_read.readline()
+	page += '<p>%s</p>' % read_data
+	mylist = page.split(',')
+	if open_read.readline() == '':
+		break
+@app.route("/temp1")
+def temp1():
+	return mylist[0] 
+@app.route("/temp2")
+def temp2():
+	return mylist[1] 
+@app.route("/temp3")
+def temp3():
+	return mylist[2] 
+@app.route("/temperatures")
+def temperatures():
+	return page  
+	#api.add_resource(index, '/')
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True)  
     #app.run(debug=True)

@@ -219,6 +219,16 @@ int main(void)
 		if(is_conversion_done == true) {
 			is_conversion_done = false;
 			printf("TEMPERATURA : %d  \r\n", (int)convert_adc_to_temp(g_ul_value) );
+
+			if ((int)convert_adc_to_temp(g_ul_value)<36){
+				printf(" 1 \n");
+			}
+			else if ((int)convert_adc_to_temp(g_ul_value)>36 && (int)convert_adc_to_temp(g_ul_value)<37){
+				printf(" 2 \n");
+			}
+			else if ((int)convert_adc_to_temp(g_ul_value)>37.5) {
+				printf(" 3 \n");
+			}
 			//ao terminar o while vou para AFEC_Temp_callback
 
 		}

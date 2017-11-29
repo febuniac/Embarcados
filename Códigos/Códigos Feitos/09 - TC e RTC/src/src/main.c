@@ -25,14 +25,65 @@
 #define LED_PIN		    8
 #define LED_PIN_MASK    (1<<LED_PIN)
 
+
+#define LED1_PIO_ID    ID_PIOA
+#define LED1_PIO       PIOA
+#define LED1_PIN       0
+#define LED1_PIN_MASK  (1 << LED1_PIN)
+
+
+
+#define LED2_PIO_ID    ID_PIOC
+#define LED2_PIO       PIOC
+#define LED2_PIN       30
+#define LED2_PIN_MASK  (1 << LED2_PIN)
+
+
+
+#define LED3_PIO_ID    ID_PIOB
+#define LED3_PIO       PIOB
+#define LED3_PIN       2
+#define LED3_PIN_MASK  (1 << LED3_PIN)
+
+
+
 /**
  * Botão
  */
+
 #define BUT_PIO_ID      ID_PIOA
 #define BUT_PIO         PIOA
 #define BUT_PIN		    11
 #define BUT_PIN_MASK    (1 << BUT_PIN)
 #define BUT_DEBOUNCING_VALUE  79
+
+
+
+#define BUT1_PIO_ID		ID_PIOD
+#define BUT1_PIO		PIOD
+#define BUT1_PIN		28
+#define BUT1_PIN_MASK	(1 << BUT1_PIN)
+#define BUT1_DEBOUNCING_VALUE  79
+
+
+
+#define BUT2_PIO_ID		ID_PIOC
+#define BUT2_PIO		PIOC
+#define BUT2_PIN		31
+#define BUT2_PIN_MASK	(1 << BUT2_PIN)
+#define BUT2_DEBOUNCING_VALUE  79
+
+
+
+#define BUT3_PIO_ID		ID_PIOA
+#define BUT3_PIO		PIOA
+#define BUT3_PIN		19
+#define BUT3_PIN_MASK	(1 << BUT3_PIN)
+#define BUT3_DEBOUNCING_VALUE  79
+
+
+
+/************************************************************************/
 
 /************************************************************************/
 /* VAR globais                                                          */
@@ -54,33 +105,180 @@ void pin_toggle(Pio *pio, uint32_t mask);
 /* Handlers                                                             */
 /************************************************************************/
 
+
 /**
  *  Handle Interrupcao botao 1
  */
-static void Button1_Handler(uint32_t id, uint32_t mask)
-{
-	
+
+void but1_Handler(){
+	/*
+	*  limpa interrupcao do PIO
+	*/
+	uint32_t pioIntStatus;
+	pioIntStatus =  pio_get_interrupt_status(BUT1_PIO);
+	/**
+	*  Toggle status led
+	*/
+	if(pio_get_output_data_status(LED1_PIO, LED1_PIN_MASK)){
+		pio_clear(LED1_PIO, LED1_PIN_MASK);
+		tc_start(TC0, 1);
+	}
+	else{
+		pio_set(LED1_PIO,LED1_PIN_MASK);
+		tc_stop(TC0, 1);
+	}
 }
 
 /**
- *  Interrupt handler for TC1 interrupt. 
+ *  Handle Interrupcao botao 2
  */
-void TC1_Handler(void){
-	volatile uint32_t ul_dummy;
 
-    /****************************************************************
+void but2_Handler(){
+	/*
+	*  limpa interrupcao do PIO
+	*/
+
+	uint32_t pioIntStatus;
+	pioIntStatus =  pio_get_interrupt_status(BUT2_PIO);
+
+	/**
+	*  Toggle status led
+	*/
+
+	if(pio_get_output_data_status(LED2_PIO, LED2_PIN_MASK)){
+		pio_clear(LED2_PIO, LED2_PIN_MASK);
+		tc_start(TC0, 2);
+	}
+	else{
+		pio_set(LED2_PIO,LED2_PIN_MASK);
+		tc_stop(TC0, 2);
+	}
+}
+
+/**
+ *  Handle Interrupcao botao 1
+ */
+
+void but3_Handler(){
+	/*
+	*  limpa interrupcao do PIO
+	*/
+
+	uint32_t pioIntStatus;
+	pioIntStatus =  pio_get_interrupt_status(BUT3_PIO);
+    
+	/**
+	*  Toggle status led
+	*/
+
+	if(pio_get_output_data_status(LED3_PIO, LED3_PIN_MASK)){
+		pio_clear(LED3_PIO, LED3_PIN_MASK);
+		tc_start(TC1, 0);
+	}
+
+   
+	else{
+		pio_set(LED3_PIO,LED3_PIN_MASK);
+		tc_stop(TC1, 0);
+	}
+}
+
+/**
+ *  Interrupt handler for TC0 interrupt. 
+ */
+
+void TC0_Handler(void){
+	volatile uint32_t ul_dummy;
+	/****************************************************************
+
 	* Devemos indicar ao TC que a interrupção foi satisfeita.
-    ******************************************************************/
-	ul_dummy = tc_get_status(TC0, 1);
+
+	******************************************************************/
+
+	ul_dummy = tc_get_status(TC0, 0);
 
 	/* Avoid compiler warning */
 	UNUSED(ul_dummy);
 
 	/** Muda o estado do LED */
+	pin_toggle(LED_PIO, LED_PIN_MASK);
+
+}
+
+/**
+
+ *  Interrupt handler for TC1 interrupt. 
+
+ */
+/**
+ *  Interrupt handler for TC1 interrupt. 
+ */
+void TC1_Handler(void){
+	volatile uint32_t ul_dummy;
+    /****************************************************************
+	* Devemos indicar ao TC que a interrupção foi satisfeita.
+    ******************************************************************/
+	ul_dummy = tc_get_status(TC0, 1);
+	/* Avoid compiler warning */
+	UNUSED(ul_dummy);
+	/** Muda o estado do LED */
     if(flag_led0)
         pin_toggle(LED_PIO, LED_PIN_MASK);
-		 
+		
 }
+
+/**
+
+ *  Interrupt handler for TC2 interrupt. 
+
+ */
+
+void TC2_Handler(void){
+
+	volatile uint32_t ul_dummy;
+
+	/****************************************************************
+
+	* Devemos indicar ao TC que a interrupção foi satisfeita.
+
+	******************************************************************/
+	ul_dummy = tc_get_status(TC0, 2);
+	/* Avoid compiler warning */
+
+	UNUSED(ul_dummy);
+	/** Muda o estado do LED */
+
+	pin_toggle(LED2_PIO, LED2_PIN_MASK);
+
+}
+
+/**
+
+ *  Interrupt handler for TC4 interrupt. 
+
+ */
+
+void TC3_Handler(void){
+
+	volatile uint32_t ul_dummy;
+
+	/****************************************************************
+	* Devemos indicar ao TC que a interrupção foi satisfeita.
+	******************************************************************/
+	ul_dummy = tc_get_status(TC1, 0);
+
+	/* Avoid compiler warning */
+	UNUSED(ul_dummy);
+	/** Muda o estado do LED */
+	pin_toggle(LED3_PIO, LED3_PIN_MASK);
+}
+
+
+
+/**
+ * \brief Interrupt handler for the RTC. Refresh the display.
+ */
+
 
 /**
  * \brief Interrupt handler for the RTC. Refresh the display.

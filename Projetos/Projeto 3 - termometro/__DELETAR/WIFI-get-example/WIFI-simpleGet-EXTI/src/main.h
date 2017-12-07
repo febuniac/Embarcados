@@ -48,7 +48,7 @@ extern "C" {
 #include "driver/include/m2m_wifi.h"
 
 /** Wi-Fi Settings */
-#define MAIN_WLAN_SSID                    "MariaGadu" /**< Destination SSID */
+#define MAIN_WLAN_SSID                    "ComputacaoEmbarcada" /**< Destination SSID */
 #define MAIN_WLAN_AUTH                    M2M_WIFI_SEC_WPA_PSK /**< Security manner */
 #define MAIN_WLAN_PSK                     "computacao" /**< Password for Destination SSID */
 
@@ -59,10 +59,10 @@ extern "C" {
 #define IPV4_BYTE(val, index)               ((val >> (index * 8)) & 0xFF)
 
 /** Send buffer of TCP socket. */
-#define MAIN_PREFIX_BUFFER                  "GET / HTTP/1.1\r\n Accept: */*\r\n\r\n"
+#define MAIN_PREFIX_BUFFER                  "GET /temperatures HTTP/1.1\r\n Accept: */*\r\n\r\n"
 
 /** Weather information provider server. */
-#define MAIN_SERVER_NAME                    "192.168.0.121"
+#define MAIN_SERVER_NAME                    "34.238.80.236"
 
 /** Receive buffer size. */
 #define MAIN_WIFI_M2M_BUFFER_SIZE           1400

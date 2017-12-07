@@ -1,3 +1,94 @@
+/**
+ *
+ * \file
+ *
+ * \brief WINC1500 Weather Client Example.
+ *
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ *
+ * \asf_license_start
+ *
+ * \page License
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * 3. The name of Atmel may not be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY ATMEL "AS IS" AND ANY EXPRESS OR IMPLIED
+ * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT ARE
+ * EXPRESSLY AND SPECIFICALLY DISCLAIMED. IN NO EVENT SHALL ATMEL BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * \asf_license_stop
+ *
+ */
+
+/** \mainpage
+ * \section intro Introduction
+ * This example demonstrates the use of the WINC1500 with the SAM Xplained Pro
+ * board to retrieve weather information from openweathermap.org server.<br>
+ * It uses the following hardware:
+ * - the SAM Xplained Pro.
+ * - the WINC1500 on EXT1.
+ *
+ * \section files Main Files
+ * - main.c : Initialize the WINC1500 and retrieve information.
+ *
+ * \section usage Usage
+ * -# Build the program and download it into the board.
+ * -# On the computer, open and configure a terminal application as the follows.
+ * \code
+ *    Baud Rate : 115200
+ *    Data : 8bit
+ *    Parity bit : none
+ *    Stop bit : 1bit
+ *    Flow control : none
+ * \endcode
+ * -# Start the application.
+ * -# In the terminal window, the following text should appear:
+ * \code
+ *    -- WINC1500 weather client example --
+ *    -- SAMXXX_XPLAINED_PRO --
+ *    -- Compiled: xxx xx xxxx xx:xx:xx --
+ *    Provision Mode started.
+ *    Connect to [atmelconfig.com] via AP[WINC1500_xx:xx] and fill up the page.
+ *    wifi_cb: M2M_WIFI_CONNECTED
+ *    wifi_cb: IP address is xxx.xxx.xxx.xxx
+ *    wifi_cb: M2M_WIFI_DISCONNECTED
+ *    wifi_cb: M2M_WIFI_RESP_PROVISION_INFO
+ *    wifi_cb: M2M_WIFI_CONNECTED
+ *    wifi_cb: IP address is xxx.xxx.xxx.xxx
+ *    resolve_cb: api.openweathermap.org IP address is xxx.xxx.xxx.xxx
+ *    City: Paris
+ *    Temperature: 24.50
+ *    Weather Condition: sky is clear
+ * \endcode
+ *
+ * \section compinfo Compilation Information
+ * This software was written for the GNU GCC compiler using Atmel Studio 6.2
+ * Other compilers may or may not work.
+ *
+ * \section contactinfo Contact Information
+ * For further information, visit
+ * <A href="http://www.atmel.com">Atmel</A>.\n
+ */
+
 #include "asf.h"
 #include "main.h"
 #include <string.h>
@@ -5,11 +96,21 @@
 #include "driver/include/m2m_wifi.h"
 #include "socket/include/socket.h"
 
+
+
 #define STRING_EOL    "\r\n"
 #define STRING_HEADER "-- WINC1500 weather client example --"STRING_EOL	\
 	"-- "BOARD_NAME " --"STRING_EOL	\
 	"-- Compiled: "__DATE__ " "__TIME__ " --"STRING_EOL
+#define YEAR        2017
+#define MOUNTH      9
+#define DAY         20
+#define WEEK        13
+#define HOUR        9
+#define MINUTE      5
+#define SECOND      0
 
+void TC1_init(int freq_TC);
 /** IP address of host. */
 uint32_t gu32HostIp = 0;
 
@@ -23,11 +124,6 @@ static uint8_t gau8ReceivedBuffer[MAIN_WIFI_M2M_BUFFER_SIZE] = {0};
 static bool gbConnectedWifi = false;
 
 /** Get host IP status variable. */
-/** Wi-Fi connection state */
-static uint8_t wifi_connected;
-
-
-/** Instance of HTTP client module. */
 static bool gbHostIpByName = false;
 
 /** TCP Connection status variable. */
@@ -35,6 +131,15 @@ static bool gbTcpConnection = false;
 
 /** Server host name. */
 static char server_host_name[] = MAIN_SERVER_NAME;
+
+uint8_t stop = 0;
+//Variavéis que salvam minha temperaturas
+uint8_t globalTemp1= 34;
+uint8_t globalTemp2= 36;
+uint8_t globalTemp3= 37;
+uint8_t connectedON = 0;
+
+char valor [5];
 
 /**
  * \brief Configure UART console.
@@ -145,55 +250,66 @@ static void resolve_cb(uint8_t *hostName, uint32_t hostIp)
  */
 static void socket_cb(SOCKET sock, uint8_t u8Msg, void *pvMsg)
 {
-  
 	/* Check for socket event on TCP socket. */
 	if (sock == tcp_client_socket) {
-    
 		switch (u8Msg) {
 		case SOCKET_MSG_CONNECT:
 		{
-      printf("socket_msg_connect\n"); 
 			if (gbTcpConnection) {
 				memset(gau8ReceivedBuffer, 0, sizeof(gau8ReceivedBuffer));
 				sprintf((char *)gau8ReceivedBuffer, "%s", MAIN_PREFIX_BUFFER);
-
 				tstrSocketConnectMsg *pstrConnect = (tstrSocketConnectMsg *)pvMsg;
 				if (pstrConnect && pstrConnect->s8Error >= SOCK_ERR_NO_ERROR) {
-          printf("send \n");
-					send(tcp_client_socket, gau8ReceivedBuffer, strlen((char *)gau8ReceivedBuffer), 0);
-
-					memset(gau8ReceivedBuffer, 0, MAIN_WIFI_M2M_BUFFER_SIZE);
-					recv(tcp_client_socket, &gau8ReceivedBuffer[0], MAIN_WIFI_M2M_BUFFER_SIZE, 0);
+					connectedON = 1;
+					//printf("%s",gau8ReceivedBuffer);
 				} else {
 					printf("socket_cb: connect error!\r\n");
 					gbTcpConnection = false;
 					close(tcp_client_socket);
 					tcp_client_socket = -1;
+					connectedON=0;
 				}
 			}
 		}
 		break;
-    
-
 
 		case SOCKET_MSG_RECV:
 		{
-			char *pcIndxPtr;
-			char *pcEndPtr;
-
+			char *pcIndxPtr = NULL;
+			char *pcEndPtr = NULL;
+			char tempString[32];
+			
 			tstrSocketRecvMsg *pstrRecv = (tstrSocketRecvMsg *)pvMsg;
-			if (pstrRecv && pstrRecv->s16BufferSize > 0) {
-        printf(pstrRecv->pu8Buffer);
-				
+		
+			if (pstrRecv && pstrRecv->s16BufferSize > 0) {			
+				if(stop == 0){	
+					recv(tcp_client_socket, &gau8ReceivedBuffer[0], MAIN_WIFI_M2M_BUFFER_SIZE, 0);
+					stop = 1;
+				}
+				else{				
+					printf("-------------- \n");
+					pcIndxPtr = strstr(pstrRecv->pu8Buffer, "<p>temp:");
+					printf(tempString);
+					sprintf(tempString, "%c%c", *(pcIndxPtr+8), *(pcIndxPtr+9));
+					globalTemp1  = atoi(tempString);
+					printf("Temp 1 = %d\n", globalTemp1);
+					sprintf(tempString, "%c%c", *(pcIndxPtr+11), *(pcIndxPtr+12));
+					globalTemp2  = atoi(tempString);
+					printf("Temp 2 = %d\n", globalTemp2);
+					sprintf(tempString, "%c%c", *(pcIndxPtr+14), *(pcIndxPtr+15));
+					globalTemp3  = atoi(tempString);
+					printf("Temp 3 = %d\n", globalTemp3);
+					stop = 0;
+				}
 				memset(gau8ReceivedBuffer, 0, sizeof(gau8ReceivedBuffer));
-				recv(tcp_client_socket, &gau8ReceivedBuffer[0], MAIN_WIFI_M2M_BUFFER_SIZE, 0);
+			
 			} else {
 				printf("socket_cb: recv error!\r\n");
 				close(tcp_client_socket);
 				tcp_client_socket = -1;
 			}
-		}
 		break;
+		}
 
 		default:
 			break;
@@ -235,7 +351,6 @@ static void wifi_cb(uint8_t u8MsgType, void *pvMsg)
 		} else if (pstrWifiState->u8CurrState == M2M_WIFI_DISCONNECTED) {
 			printf("wifi_cb: M2M_WIFI_DISCONNECTED\r\n");
 			gbConnectedWifi = false;
- 			wifi_connected = 0;
 		}
 
 		break;
@@ -246,7 +361,7 @@ static void wifi_cb(uint8_t u8MsgType, void *pvMsg)
 		uint8_t *pu8IPAddress = (uint8_t *)pvMsg;
 		printf("wifi_cb: IP address is %u.%u.%u.%u\r\n",
 				pu8IPAddress[0], pu8IPAddress[1], pu8IPAddress[2], pu8IPAddress[3]);
-		wifi_connected = M2M_WIFI_CONNECTED;
+		gbConnectedWifi = true;
 		
     /* Obtain the IP Address by network name */
 		//gethostbyname((uint8_t *)server_host_name);
@@ -259,6 +374,49 @@ static void wifi_cb(uint8_t u8MsgType, void *pvMsg)
 	}
 	}
 }
+
+
+void TC1_init(int freq_TC){
+	uint32_t ul_div;
+	uint32_t ul_tcclks;
+	uint32_t ul_sysclk = sysclk_get_cpu_hz();
+	
+	uint32_t channel = 1;
+	
+	/* Configura o PMC */
+	pmc_enable_periph_clk(ID_TC1);
+	
+	//int freq_TC=4;//4Hz (4 vezes pos segundo led pisca)
+	
+	/** Configura o TC para operar em  4Mhz e interrupçcão no RC compare */
+	tc_find_mck_divisor(freq_TC, ul_sysclk, &ul_div, &ul_tcclks, ul_sysclk);
+	tc_init(TC0, channel, ul_tcclks | TC_CMR_CPCTRG);
+	tc_write_rc(TC0, channel, (ul_sysclk / ul_div) / freq_TC);
+
+	/* Configura e ativa interrupçcão no TC canal 0 */
+	NVIC_EnableIRQ((IRQn_Type) ID_TC1);
+	tc_enable_interrupt(TC0, channel, TC_IER_CPCS);
+
+	/* Inicializa o canal 0 do TC */
+	tc_start(TC0, channel);
+}
+void TC1_Handler(void){
+	volatile uint32_t ul_dummy;
+	
+ 
+	ul_dummy = tc_get_status(TC0, 1);
+
+	UNUSED(ul_dummy);
+	
+	
+	if(connectedON){
+	printf("send : %d \n",gau8ReceivedBuffer );
+	send(tcp_client_socket, gau8ReceivedBuffer, strlen((char *)gau8ReceivedBuffer), 0);
+	memset(gau8ReceivedBuffer, 0, MAIN_WIFI_M2M_BUFFER_SIZE);
+	recv(tcp_client_socket, &gau8ReceivedBuffer[0], MAIN_WIFI_M2M_BUFFER_SIZE, 0);
+	}
+}
+
 
 /**
  * \brief Main application function.
@@ -278,14 +436,14 @@ int main(void)
 	/* Initialize the board. */
 	sysclk_init();
 	board_init();
-
+	
 	/* Initialize the UART console. */
 	configure_console();
 	printf(STRING_HEADER);
 
 	/* Initialize the BSP. */
 	nm_bsp_init();
-  
+
 	/* Initialize Wi-Fi parameters structure. */
 	memset((uint8_t *)&param, 0, sizeof(tstrWifiInitParam));
 
@@ -297,48 +455,49 @@ int main(void)
 		while (1) {
 		}
 	}
-  
-	/* Initialize socket module. */
+
+	/* Initialize socket API. */
 	socketInit();
-  
-	/* Register socket callback function. */
 	registerSocketCallback(socket_cb, resolve_cb);
 
-  /* Connect to router. */
-	printf("main: connecting to WiFi AP %s...\r\n", (char *)MAIN_WLAN_SSID);
-	m2m_wifi_connect((char *)MAIN_WLAN_SSID, sizeof(MAIN_WLAN_SSID), MAIN_WLAN_AUTH, (char *)MAIN_WLAN_PSK, M2M_WIFI_CH_ALL);
+	/* Connect to router. */
+	m2m_wifi_connect((char *)MAIN_WLAN_SSID, sizeof(MAIN_WLAN_SSID), MAIN_WLAN_AUTH, (char *)MAIN_WLAN_PSK, M2M_WIFI_CH_ALL);	
 
-	addr_in.sin_family = AF_INET;
-	addr_in.sin_port = _htons(MAIN_SERVER_PORT);
-  inet_aton(MAIN_SERVER_NAME, &addr_in.sin_addr);
-  printf("Inet aton : %d", addr_in.sin_addr);
+	/** Configura timer 1 */
+	//TC1_init(2);
+	
 
-  while(1){
- 		m2m_wifi_handle_events(NULL);
+	while (1) {
+		m2m_wifi_handle_events(NULL);
 
-   	if (wifi_connected == M2M_WIFI_CONNECTED) {  
-    	/* Open client socket. */
-			if (tcp_client_socket < 0) {
-        printf("socket init \n");
-				if ((tcp_client_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-					printf("main: failed to create TCP client socket error!\r\n");
+		if (gbConnectedWifi && !gbTcpConnection) {
+			//if (gbHostIpByName) {
+				/* Open TCP client socket. */
+				if (tcp_client_socket < 0) {
+					if ((tcp_client_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+						printf("main: failed to create TCP client socket error!\r\n");
+						continue;
+					}
+				}
+
+        inet_aton(MAIN_SERVER_NAME, &addr_in.sin_addr);
+       
+        //addr_in.sin_addr.s_addr =  0xc0a8008a;
+        printf("inet_aton : 0x%X \n", addr_in.sin_addr.s_addr);
+        
+				/* Connect TCP client socket. */
+				addr_in.sin_family = AF_INET;
+				addr_in.sin_port = _htons(MAIN_SERVER_PORT);
+				//addr_in.sin_addr.s_addr =
+				if (connect(tcp_client_socket, (struct sockaddr *)&addr_in, sizeof(struct sockaddr_in)) != SOCK_ERR_NO_ERROR) {
+					printf("main: failed to connect socket error!\r\n");
 					continue;
 				}
 
-				/* Connect server */
-        printf("socket connecting\n");
-        
-				if (connect(tcp_client_socket, (struct sockaddr *)&addr_in, sizeof(struct sockaddr_in)) != SOCK_ERR_NO_ERROR) {
-					close(tcp_client_socket);
-					tcp_client_socket = -1;
-          printf("error\n");
-				}else{
-          gbTcpConnection = true;
-        }
-			}
-    }
-  }
-
+				gbTcpConnection = true;
+			//}
+		}
+	}
 
 	return 0;
 }

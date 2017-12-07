@@ -102,13 +102,7 @@
 #define STRING_HEADER "-- WINC1500 weather client example --"STRING_EOL	\
 	"-- "BOARD_NAME " --"STRING_EOL	\
 	"-- Compiled: "__DATE__ " "__TIME__ " --"STRING_EOL
-#define YEAR        2017
-#define MOUNTH      9
-#define DAY         20
-#define WEEK        13
-#define HOUR        9
-#define MINUTE      5
-#define SECOND      0
+
 /** Reference voltage for AFEC,in mv. */
 #define VOLT_REF        (3300)
 
@@ -129,7 +123,7 @@ volatile uint32_t g_ul_value = 0;
 #define LED_PIN			8
 #define LED_PIN_MASK	(1<<LED_PIN)
 
-/*LEDs EXTERNO VERDE E VERMELHO*/
+/*LEDs EXTERNO VERDE, VERMELHO E AMARELO*/
 //LED Verde ( EXT2 PIO A pino 24 (PA24) (pino 10 da placa)
 #define LEDVerde_PIO_ID		ID_PIOA
 #define LEDVerde_PIO        PIOA
@@ -149,6 +143,7 @@ volatile uint32_t g_ul_value = 0;
 #define LEDAmarelo_PIN_MASK 	(1<<LEDAmarelo_PIN)
 
 void TC1_init(int freq_TC);
+
 /** IP address of host. */
 uint32_t gu32HostIp = 0;
 
@@ -157,6 +152,7 @@ static SOCKET tcp_client_socket = -1;
 
 /** Receive buffer definition. */
 static uint8_t gau8ReceivedBuffer[MAIN_WIFI_M2M_BUFFER_SIZE] = {0};
+static uint8_t gau8PostBuffer[MAIN_WIFI_M2M_BUFFER_SIZE*2] = {0};
 
 /** Wi-Fi status variable. */
 static bool gbConnectedWifi = false;
@@ -167,6 +163,9 @@ static bool gbHostIpByName = false;
 /** TCP Connection status variable. */
 static bool gbTcpConnection = false;
 
+/** Wi-Fi connection state */
+static uint8_t wifi_connected;
+
 /** Server host name. */
 static char server_host_name[] = MAIN_SERVER_NAME;
 
@@ -175,10 +174,10 @@ uint8_t stop = 0;
 uint8_t globalTemp1= 34;
 uint8_t globalTemp2= 36;
 uint8_t globalTemp3= 37;
-uint8_t connectedON = 0;
+uint8_t connectedON = false;
 
 char valor [5];
-
+uint8_t recveivedOk = false;
 /**
  * \brief Configure UART console.
  */
@@ -293,19 +292,18 @@ static void socket_cb(SOCKET sock, uint8_t u8Msg, void *pvMsg)
 		switch (u8Msg) {
 		case SOCKET_MSG_CONNECT:
 		{
+			printf("socket_msg_connect\n"); 
 			if (gbTcpConnection) {
-				memset(gau8ReceivedBuffer, 0, sizeof(gau8ReceivedBuffer));
-				sprintf((char *)gau8ReceivedBuffer, "%s", MAIN_PREFIX_BUFFER);
 				tstrSocketConnectMsg *pstrConnect = (tstrSocketConnectMsg *)pvMsg;
 				if (pstrConnect && pstrConnect->s8Error >= SOCK_ERR_NO_ERROR) {
-					connectedON = 1;
+					connectedON = true;
 					//printf("%s",gau8ReceivedBuffer);
 				} else {
 					printf("socket_cb: connect error!\r\n");
 					gbTcpConnection = false;
 					close(tcp_client_socket);
 					tcp_client_socket = -1;
-					connectedON=0;
+					connectedON=false;
 				}
 			}
 		}
@@ -340,7 +338,11 @@ static void socket_cb(SOCKET sock, uint8_t u8Msg, void *pvMsg)
 					stop = 0;
 				}
 				memset(gau8ReceivedBuffer, 0, sizeof(gau8ReceivedBuffer));
-			
+
+				//if(recveivedOk == false){
+					//recv(tcp_client_socket, &gau8ReceivedBuffer[0], MAIN_WIFI_M2M_BUFFER_SIZE, 0);
+					//recveivedOk = true;
+				//}
 			} else {
 				printf("socket_cb: recv error!\r\n");
 				close(tcp_client_socket);
@@ -486,12 +488,19 @@ void TC1_Handler(void){
 	UNUSED(ul_dummy);
 	
 	afec_start_software_conversion(AFEC0);
+	//memset(gau8ReceivedBuffer, 0, sizeof(gau8ReceivedBuffer));
+	//sprintf((char *)gau8ReceivedBuffer, "%s", MAIN_PREFIX_BUFFER);
+	//printf("\n");
+	memset(gau8ReceivedBuffer, 0, sizeof(gau8ReceivedBuffer));
+	sprintf((char *)gau8ReceivedBuffer, "%s", MAIN_PREFIX_BUFFER);
 	if(connectedON){
 		printf("send : %d \n",gau8ReceivedBuffer );
 		send(tcp_client_socket, gau8ReceivedBuffer, strlen((char *)gau8ReceivedBuffer), 0);
 		memset(gau8ReceivedBuffer, 0, MAIN_WIFI_M2M_BUFFER_SIZE);
 		recv(tcp_client_socket, &gau8ReceivedBuffer[0], MAIN_WIFI_M2M_BUFFER_SIZE, 0);
+		recveivedOk =false;
 	}
+
 }
 /** 
  * converte valor lido do ADC para temperatura em graus celsius
@@ -577,9 +586,9 @@ int main(void)
 	nm_bsp_init();
 	/*Inicializando os LEDs com seus valores iniciais*/
 	ledConfig(0);
-	ledConfig1(0);
-	ledConfig2(0);
-	ledConfig3(0);
+	ledConfig1(1);
+	ledConfig2(1);
+	ledConfig3(1);
 	
 	/* Initialize Wi-Fi parameters structure. */
 	memset((uint8_t *)&param, 0, sizeof(tstrWifiInitParam));
@@ -601,7 +610,7 @@ int main(void)
 	m2m_wifi_connect((char *)MAIN_WLAN_SSID, sizeof(MAIN_WLAN_SSID), MAIN_WLAN_AUTH, (char *)MAIN_WLAN_PSK, M2M_WIFI_CH_ALL);	
 
 	/** Configura timer 1 */
-	TC1_init(2);
+	//TC1_init(2);
 	
 	/*AFEC CONFIG*/
 	 /* Ativa AFEC - 0 */
@@ -648,6 +657,7 @@ int main(void)
   afec_start_software_conversion(AFEC0);
 
 	while (1) {
+
 		m2m_wifi_handle_events(NULL);
 
 		if (gbConnectedWifi && !gbTcpConnection) {
@@ -678,6 +688,7 @@ int main(void)
 			//}
 		}
 	}
+
 	if(is_conversion_done == true) {
 		is_conversion_done = false;
 		int temperatura =(int)convert_adc_to_temp(g_ul_value);	

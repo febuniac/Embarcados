@@ -5546,6 +5546,16 @@ Discarded input sections
  .text          0x00000000        0x0 src/Driver/pio_insper.o
  .data          0x00000000        0x0 src/Driver/pio_insper.o
  .bss           0x00000000        0x0 src/Driver/pio_insper.o
+ .text._pio_pull_up
+                0x00000000        0xc src/Driver/pio_insper.o
+ .text._pio_pull_down
+                0x00000000       0x10 src/Driver/pio_insper.o
+ .text.pio_set_output
+                0x00000000       0x14 src/Driver/pio_insper.o
+ .text.pio_set_input
+                0x00000000       0x1c src/Driver/pio_insper.o
+ .text.pio_get_output_data_status
+                0x00000000        0xc src/Driver/pio_insper.o
  .bss.cpu_irq_critical_section_counter
                 0x00000000        0x4 src/Driver/pio_insper.o
  .bss.cpu_irq_prev_interrupt_state
@@ -6756,7 +6766,7 @@ OUTPUT(09-PIO-DRIVER.elf elf32-littlearm)
  .comment       0x00000059       0x5a src/Driver/pmc_insper.o
  .comment       0x00000059       0x5a src/main.o
 
-.debug_info     0x00000000     0x88a6
+.debug_info     0x00000000     0x8a51
  .debug_info    0x00000000      0x846 src/ASF/common/services/clock/same70/sysclk.o
  .debug_info    0x00000846      0x1e4 src/ASF/common/utils/interrupt/interrupt_sam_nvic.o
  .debug_info    0x00000a2a     0x1888 src/ASF/sam/drivers/pio/pio.o
@@ -6764,11 +6774,11 @@ OUTPUT(09-PIO-DRIVER.elf elf32-littlearm)
  .debug_info    0x00003498     0x14fb src/ASF/sam/drivers/pmc/pmc.o
  .debug_info    0x00004993      0xc1d src/ASF/sam/utils/cmsis/same70/source/templates/gcc/startup_same70.o
  .debug_info    0x000055b0      0x56c src/ASF/sam/utils/cmsis/same70/source/templates/system_same70.o
- .debug_info    0x00005b1c      0xf90 src/Driver/pio_insper.o
- .debug_info    0x00006aac      0xdd5 src/Driver/pmc_insper.o
- .debug_info    0x00007881     0x1025 src/main.o
+ .debug_info    0x00005b1c     0x113b src/Driver/pio_insper.o
+ .debug_info    0x00006c57      0xdd5 src/Driver/pmc_insper.o
+ .debug_info    0x00007a2c     0x1025 src/main.o
 
-.debug_abbrev   0x00000000     0x142c
+.debug_abbrev   0x00000000     0x14aa
  .debug_abbrev  0x00000000      0x230 src/ASF/common/services/clock/same70/sysclk.o
  .debug_abbrev  0x00000230       0xed src/ASF/common/utils/interrupt/interrupt_sam_nvic.o
  .debug_abbrev  0x0000031d      0x31a src/ASF/sam/drivers/pio/pio.o
@@ -6776,20 +6786,21 @@ OUTPUT(09-PIO-DRIVER.elf elf32-littlearm)
  .debug_abbrev  0x00000894      0x2bd src/ASF/sam/drivers/pmc/pmc.o
  .debug_abbrev  0x00000b51      0x221 src/ASF/sam/utils/cmsis/same70/source/templates/gcc/startup_same70.o
  .debug_abbrev  0x00000d72       0xf5 src/ASF/sam/utils/cmsis/same70/source/templates/system_same70.o
- .debug_abbrev  0x00000e67      0x1cb src/Driver/pio_insper.o
- .debug_abbrev  0x00001032      0x1cd src/Driver/pmc_insper.o
- .debug_abbrev  0x000011ff      0x22d src/main.o
+ .debug_abbrev  0x00000e67      0x249 src/Driver/pio_insper.o
+ .debug_abbrev  0x000010b0      0x1cd src/Driver/pmc_insper.o
+ .debug_abbrev  0x0000127d      0x22d src/main.o
 
-.debug_loc      0x00000000     0x263c
+.debug_loc      0x00000000     0x26bb
  .debug_loc     0x00000000      0x183 src/ASF/common/services/clock/same70/sysclk.o
  .debug_loc     0x00000183      0xf3a src/ASF/sam/drivers/pio/pio.o
  .debug_loc     0x000010bd      0x555 src/ASF/sam/drivers/pio/pio_handler.o
  .debug_loc     0x00001612      0xec0 src/ASF/sam/drivers/pmc/pmc.o
  .debug_loc     0x000024d2       0x6a src/ASF/sam/utils/cmsis/same70/source/templates/gcc/startup_same70.o
- .debug_loc     0x0000253c       0x74 src/Driver/pmc_insper.o
- .debug_loc     0x000025b0       0x8c src/main.o
+ .debug_loc     0x0000253c       0x7f src/Driver/pio_insper.o
+ .debug_loc     0x000025bb       0x74 src/Driver/pmc_insper.o
+ .debug_loc     0x0000262f       0x8c src/main.o
 
-.debug_aranges  0x00000000      0x598
+.debug_aranges  0x00000000      0x5c0
  .debug_aranges
                 0x00000000       0x40 src/ASF/common/services/clock/same70/sysclk.o
  .debug_aranges
@@ -6805,13 +6816,13 @@ OUTPUT(09-PIO-DRIVER.elf elf32-littlearm)
  .debug_aranges
                 0x000004e8       0x30 src/ASF/sam/utils/cmsis/same70/source/templates/system_same70.o
  .debug_aranges
-                0x00000518       0x28 src/Driver/pio_insper.o
+                0x00000518       0x50 src/Driver/pio_insper.o
  .debug_aranges
-                0x00000540       0x28 src/Driver/pmc_insper.o
+                0x00000568       0x28 src/Driver/pmc_insper.o
  .debug_aranges
-                0x00000568       0x30 src/main.o
+                0x00000590       0x30 src/main.o
 
-.debug_ranges   0x00000000      0x5d0
+.debug_ranges   0x00000000      0x5f8
  .debug_ranges  0x00000000       0x30 src/ASF/common/services/clock/same70/sysclk.o
  .debug_ranges  0x00000030       0x18 src/ASF/common/utils/interrupt/interrupt_sam_nvic.o
  .debug_ranges  0x00000048      0x270 src/ASF/sam/drivers/pio/pio.o
@@ -6819,9 +6830,9 @@ OUTPUT(09-PIO-DRIVER.elf elf32-littlearm)
  .debug_ranges  0x00000308      0x240 src/ASF/sam/drivers/pmc/pmc.o
  .debug_ranges  0x00000548       0x18 src/ASF/sam/utils/cmsis/same70/source/templates/gcc/startup_same70.o
  .debug_ranges  0x00000560       0x20 src/ASF/sam/utils/cmsis/same70/source/templates/system_same70.o
- .debug_ranges  0x00000580       0x18 src/Driver/pio_insper.o
- .debug_ranges  0x00000598       0x18 src/Driver/pmc_insper.o
- .debug_ranges  0x000005b0       0x20 src/main.o
+ .debug_ranges  0x00000580       0x40 src/Driver/pio_insper.o
+ .debug_ranges  0x000005c0       0x18 src/Driver/pmc_insper.o
+ .debug_ranges  0x000005d8       0x20 src/main.o
 
 .debug_macro    0x00000000    0x1cd7a
  .debug_macro   0x00000000      0x6a1 src/ASF/common/services/clock/same70/sysclk.o
@@ -6987,7 +6998,7 @@ OUTPUT(09-PIO-DRIVER.elf elf32-littlearm)
  .debug_macro   0x0001be29      0x77e src/Driver/pmc_insper.o
  .debug_macro   0x0001c5a7      0x7d3 src/main.o
 
-.debug_line     0x00000000     0x799a
+.debug_line     0x00000000     0x7a03
  .debug_line    0x00000000      0xb1f src/ASF/common/services/clock/same70/sysclk.o
  .debug_line    0x00000b1f      0x9d5 src/ASF/common/utils/interrupt/interrupt_sam_nvic.o
  .debug_line    0x000014f4      0xe89 src/ASF/sam/drivers/pio/pio.o
@@ -6995,33 +7006,33 @@ OUTPUT(09-PIO-DRIVER.elf elf32-littlearm)
  .debug_line    0x00002e07     0x1052 src/ASF/sam/drivers/pmc/pmc.o
  .debug_line    0x00003e59      0xa48 src/ASF/sam/utils/cmsis/same70/source/templates/gcc/startup_same70.o
  .debug_line    0x000048a1      0x7d2 src/ASF/sam/utils/cmsis/same70/source/templates/system_same70.o
- .debug_line    0x00005073      0xda3 src/Driver/pio_insper.o
- .debug_line    0x00005e16      0xdad src/Driver/pmc_insper.o
- .debug_line    0x00006bc3      0xdd7 src/main.o
+ .debug_line    0x00005073      0xe0c src/Driver/pio_insper.o
+ .debug_line    0x00005e7f      0xdad src/Driver/pmc_insper.o
+ .debug_line    0x00006c2c      0xdd7 src/main.o
 
-.debug_str      0x00000000    0x88897
+.debug_str      0x00000000    0x88899
  .debug_str     0x00000000    0x84d1b src/ASF/common/services/clock/same70/sysclk.o
                               0x85365 (size before relaxing)
  .debug_str     0x00084d1b       0x94 src/ASF/common/utils/interrupt/interrupt_sam_nvic.o
                               0x814e3 (size before relaxing)
- .debug_str     0x00084daf      0xb1f src/ASF/sam/drivers/pio/pio.o
+ .debug_str     0x00084daf      0xb05 src/ASF/sam/drivers/pio/pio.o
                               0x82039 (size before relaxing)
- .debug_str     0x000858ce      0x59e src/ASF/sam/drivers/pio/pio_handler.o
+ .debug_str     0x000858b4      0x59e src/ASF/sam/drivers/pio/pio_handler.o
                               0x820aa (size before relaxing)
- .debug_str     0x00085e6c      0x7c7 src/ASF/sam/drivers/pmc/pmc.o
+ .debug_str     0x00085e52      0x7c7 src/ASF/sam/drivers/pmc/pmc.o
                               0x8218e (size before relaxing)
- .debug_str     0x00086633      0x688 src/ASF/sam/utils/cmsis/same70/source/templates/gcc/startup_same70.o
+ .debug_str     0x00086619      0x688 src/ASF/sam/utils/cmsis/same70/source/templates/gcc/startup_same70.o
                               0x81c89 (size before relaxing)
- .debug_str     0x00086cbb      0x1aa src/ASF/sam/utils/cmsis/same70/source/templates/system_same70.o
+ .debug_str     0x00086ca1      0x1aa src/ASF/sam/utils/cmsis/same70/source/templates/system_same70.o
                               0x726c0 (size before relaxing)
- .debug_str     0x00086e65     0x18f2 src/Driver/pio_insper.o
-                              0x86f27 (size before relaxing)
- .debug_str     0x00088757       0x5c src/Driver/pmc_insper.o
+ .debug_str     0x00086e4b     0x190e src/Driver/pio_insper.o
+                              0x86fd4 (size before relaxing)
+ .debug_str     0x00088759       0x5c src/Driver/pmc_insper.o
                               0x86e72 (size before relaxing)
- .debug_str     0x000887b3       0xe4 src/main.o
+ .debug_str     0x000887b5       0xe4 src/main.o
                               0x86fdc (size before relaxing)
 
-.debug_frame    0x00000000      0xc8c
+.debug_frame    0x00000000      0xcdc
  .debug_frame   0x00000000       0x88 src/ASF/common/services/clock/same70/sysclk.o
  .debug_frame   0x00000088       0x30 src/ASF/common/utils/interrupt/interrupt_sam_nvic.o
  .debug_frame   0x000000b8      0x398 src/ASF/sam/drivers/pio/pio.o
@@ -7029,14 +7040,14 @@ OUTPUT(09-PIO-DRIVER.elf elf32-littlearm)
  .debug_frame   0x00000560      0x4f8 src/ASF/sam/drivers/pmc/pmc.o
  .debug_frame   0x00000a58       0x38 src/ASF/sam/utils/cmsis/same70/source/templates/gcc/startup_same70.o
  .debug_frame   0x00000a90       0x40 src/ASF/sam/utils/cmsis/same70/source/templates/system_same70.o
- .debug_frame   0x00000ad0       0x30 src/Driver/pio_insper.o
- .debug_frame   0x00000b00       0x30 src/Driver/pmc_insper.o
- .debug_frame   0x00000b30       0x58 src/main.o
- .debug_frame   0x00000b88       0x2c c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/5.3.1/../../../../arm-none-eabi/lib/armv7e-m\libc.a(lib_a-init.o)
- .debug_frame   0x00000bb4       0x50 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/5.3.1/../../../../arm-none-eabi/lib/armv7e-m\libc.a(lib_a-__call_atexit.o)
- .debug_frame   0x00000c04       0x20 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/5.3.1/../../../../arm-none-eabi/lib/armv7e-m\libc.a(lib_a-atexit.o)
- .debug_frame   0x00000c24       0x34 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/5.3.1/../../../../arm-none-eabi/lib/armv7e-m\libc.a(lib_a-fini.o)
- .debug_frame   0x00000c58       0x34 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/5.3.1/../../../../arm-none-eabi/lib/armv7e-m\libc.a(lib_a-__atexit.o)
+ .debug_frame   0x00000ad0       0x80 src/Driver/pio_insper.o
+ .debug_frame   0x00000b50       0x30 src/Driver/pmc_insper.o
+ .debug_frame   0x00000b80       0x58 src/main.o
+ .debug_frame   0x00000bd8       0x2c c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/5.3.1/../../../../arm-none-eabi/lib/armv7e-m\libc.a(lib_a-init.o)
+ .debug_frame   0x00000c04       0x50 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/5.3.1/../../../../arm-none-eabi/lib/armv7e-m\libc.a(lib_a-__call_atexit.o)
+ .debug_frame   0x00000c54       0x20 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/5.3.1/../../../../arm-none-eabi/lib/armv7e-m\libc.a(lib_a-atexit.o)
+ .debug_frame   0x00000c74       0x34 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/5.3.1/../../../../arm-none-eabi/lib/armv7e-m\libc.a(lib_a-fini.o)
+ .debug_frame   0x00000ca8       0x34 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/5.3.1/../../../../arm-none-eabi/lib/armv7e-m\libc.a(lib_a-__atexit.o)
 
 Cross Reference Table
 
@@ -7163,6 +7174,8 @@ _lseek                                            src/ASF/sam/utils/syscalls/gcc
 _mainCRTStartup                                   c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/5.3.1/../../../../arm-none-eabi/lib/armv7e-m/crt0.o
 _pio_clear                                        src/Driver/pio_insper.o
                                                   src/main.o
+_pio_pull_down                                    src/Driver/pio_insper.o
+_pio_pull_up                                      src/Driver/pio_insper.o
 _pio_set                                          src/Driver/pio_insper.o
                                                   src/main.o
 _pmc_disable_periph_clock                         src/Driver/pmc_insper.o
@@ -7256,7 +7269,8 @@ pio_get_interrupt_mask                            src/ASF/sam/drivers/pio/pio.o
 pio_get_interrupt_status                          src/ASF/sam/drivers/pio/pio.o
                                                   src/ASF/sam/drivers/pio/pio_handler.o
 pio_get_multi_driver_status                       src/ASF/sam/drivers/pio/pio.o
-pio_get_output_data_status                        src/ASF/sam/drivers/pio/pio.o
+pio_get_output_data_status                        src/Driver/pio_insper.o
+                                                  src/ASF/sam/drivers/pio/pio.o
 pio_get_output_write_status                       src/ASF/sam/drivers/pio/pio.o
 pio_get_pin_group                                 src/ASF/sam/drivers/pio/pio.o
                                                   src/ASF/sam/drivers/pio/pio_handler.o
@@ -7276,10 +7290,12 @@ pio_pull_up                                       src/ASF/sam/drivers/pio/pio.o
 pio_set                                           src/ASF/sam/drivers/pio/pio.o
 pio_set_additional_interrupt_mode                 src/ASF/sam/drivers/pio/pio.o
 pio_set_debounce_filter                           src/ASF/sam/drivers/pio/pio.o
-pio_set_input                                     src/ASF/sam/drivers/pio/pio.o
+pio_set_input                                     src/Driver/pio_insper.o
+                                                  src/ASF/sam/drivers/pio/pio.o
 pio_set_io_drive                                  src/ASF/sam/drivers/pio/pio.o
 pio_set_multi_driver                              src/ASF/sam/drivers/pio/pio.o
-pio_set_output                                    src/ASF/sam/drivers/pio/pio.o
+pio_set_output                                    src/Driver/pio_insper.o
+                                                  src/ASF/sam/drivers/pio/pio.o
 pio_set_peripheral                                src/ASF/sam/drivers/pio/pio.o
 pio_set_pin_group_high                            src/ASF/sam/drivers/pio/pio.o
 pio_set_pin_group_low                             src/ASF/sam/drivers/pio/pio.o

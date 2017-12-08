@@ -45,10 +45,13 @@ ul_mask	Bitmask of one or more pin(s) to configure.
 ul_pull_down_enable	Indicates if the pin(s) internal pull-down shall be configured.
 */
 void _pio_pull_down(Pio *p_pio, const uint32_t ul_mask, const uint32_t ul_pull_down_enable) {
-	if (ul_pull_down_enable)
-	p_pio->PIO_PPDER = ul_mask; // Pull Down Enable Register
-	else
-	p_pio->PIO_PPDDR = ul_mask; // // Pull Down Enable Register
+	if (ul_pull_down_enable){
+		p_pio->PIO_PPDER = ul_mask; // Pull Down Enable Register
+	}
+	else{
+		p_pio->PIO_PPDDR = ul_mask; // // Pull Down Enable Register
+	}
+	
 }
 
 /*Configure one or more pin(s) of a PIO controller as outputs, with the given default value.
@@ -100,10 +103,12 @@ void pio_set_input	(Pio * 	p_pio,const uint32_t ul_mask,const uint32_t ul_attrib
 To get the actual value of the pin, use PIO_Get() instead.*/
 
 uint32_t pio_get_output_data_status	(const Pio * p_pio, const uint32_t 	ul_mask){
-	if ((p_pio->PIO_ODSR & ul_mask) == 0)
+	if ((p_pio->PIO_ODSR & ul_mask) == 0){
 		return 0;
-	else
+		}
+	else{
 		return 1;
+	}
 }
 
 

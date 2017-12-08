@@ -6998,7 +6998,7 @@ OUTPUT(09-PIO-DRIVER.elf elf32-littlearm)
  .debug_macro   0x0001be29      0x77e src/Driver/pmc_insper.o
  .debug_macro   0x0001c5a7      0x7d3 src/main.o
 
-.debug_line     0x00000000     0x7a03
+.debug_line     0x00000000     0x7a04
  .debug_line    0x00000000      0xb1f src/ASF/common/services/clock/same70/sysclk.o
  .debug_line    0x00000b1f      0x9d5 src/ASF/common/utils/interrupt/interrupt_sam_nvic.o
  .debug_line    0x000014f4      0xe89 src/ASF/sam/drivers/pio/pio.o
@@ -7006,9 +7006,9 @@ OUTPUT(09-PIO-DRIVER.elf elf32-littlearm)
  .debug_line    0x00002e07     0x1052 src/ASF/sam/drivers/pmc/pmc.o
  .debug_line    0x00003e59      0xa48 src/ASF/sam/utils/cmsis/same70/source/templates/gcc/startup_same70.o
  .debug_line    0x000048a1      0x7d2 src/ASF/sam/utils/cmsis/same70/source/templates/system_same70.o
- .debug_line    0x00005073      0xe0c src/Driver/pio_insper.o
- .debug_line    0x00005e7f      0xdad src/Driver/pmc_insper.o
- .debug_line    0x00006c2c      0xdd7 src/main.o
+ .debug_line    0x00005073      0xe0d src/Driver/pio_insper.o
+ .debug_line    0x00005e80      0xdad src/Driver/pmc_insper.o
+ .debug_line    0x00006c2d      0xdd7 src/main.o
 
 .debug_str      0x00000000    0x88899
  .debug_str     0x00000000    0x84d1b src/ASF/common/services/clock/same70/sysclk.o

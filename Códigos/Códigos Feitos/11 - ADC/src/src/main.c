@@ -43,7 +43,14 @@ volatile uint32_t g_ul_value = 0;
 #define AFEC_CHANNEL_TEMP_SENSOR 11
 
 void TC1_init(int freq_TC);
-
+void mais_segundo(int *segundo, int *minuto, int *hora, int *dia, int *mes, int *ano);
+int segundo,minuto,hora,dia,mes,ano;
+segundo = 0;
+minuto = 35;
+hora = 7;
+dia = 22;
+mes = 5;
+ano = 2017;
 /************************************************************************/
 /* Funcoes                                                              */
 /************************************************************************/
@@ -147,10 +154,43 @@ void TC1_Handler(void){
 
 	/* Avoid compiler warning */
 	UNUSED(ul_dummy);
-
-	afec_start_software_conversion(AFEC0);
+	if(is_conversion_done == true) {
+		is_conversion_done = false;
+		mais_segundo(&segundo,&minuto,&hora,&dia,&mes,&ano);
+		printf("%d/%d/%d %d:%d:%d - Temp : %d \n \r\n",dia,mes,ano,hora,minuto,segundo,convert_adc_to_temp(g_ul_value/*voltagem recebida*/));//A função recebe como parametro uma voltagem e transforma em graus celsius
+		afec_start_software_conversion(AFEC0);
+	}
 }
-
+void mais_segundo(int *segundo, int *minuto, int *hora, int *dia, int *mes, int *ano){
+	/* incrementa minuto (Para casos de mudança de hora ou de mes ou de ano) */
+	if(segundo>=59){
+		if(minuto>=59){
+			if(hora>=23){
+				if(dia>=30){
+					if(mes>=11){
+						ano++;
+					}
+					else{
+						mes++;
+					}
+					
+				}
+				else{
+					dia++;
+				}
+			}
+			else{
+				hora++;
+			}
+		}
+		else{
+			minuto++;
+		}
+	}
+		else{
+			segundo++;
+		}
+}
 int main(void)
 {
 

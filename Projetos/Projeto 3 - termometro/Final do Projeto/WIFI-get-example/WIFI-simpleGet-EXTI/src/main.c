@@ -46,6 +46,15 @@ volatile uint32_t g_ul_value = 0;
 #define LEDAmarelo_PIN			11
 #define LEDAmarelo_PIN_MASK 	(1<<LEDAmarelo_PIN)
 
+/**
+ * Botão
+ */
+#define BUT_PIO_ID      ID_PIOA
+#define BUT_PIO         PIOA
+#define BUT_PIN		    11
+#define BUT_PIN_MASK    (1 << BUT_PIN)
+#define BUT_DEBOUNCING_VALUE  79
+
 #define STRING_EOL    "\r\n"
 #define STRING_HEADER "-- WINC1500 weather client example --"STRING_EOL	\
 "-- "BOARD_NAME " --"STRING_EOL	\
@@ -86,6 +95,8 @@ uint8_t globalTemp1= 34;
 uint8_t globalTemp2= 36;
 uint8_t globalTemp3= 37;
 uint8_t connectedON = false;
+void but_init(void);
+void but_Handler();
 
 /**
 * \brief Configure UART console.
@@ -325,9 +336,20 @@ static void wifi_cb(uint8_t u8MsgType, void *pvMsg)
 		}
 	}
 }
+
+
+
+
 /**
-* CONFIGURAÇÃO DOS LEDs
+* CONFIGURAÇÃO DOS LEDs e do Botão
 */
+void butConfig(){
+	PMC->PMC_PCER0= (1<<BUT_PIO_ID);
+	PIOA->PIO_PER = (1<<BUT_PIN);
+	PIOA->PIO_ODR = (1<<BUT_PIN);
+	PIOA->PIO_PUER= (1<<BUT_PIN);
+	PIOA->PIO_IFER= (1<<BUT_PIN);
+};
 void ledConfig(int estado){
 	PMC->PMC_PCER0      = (1<<LED_PIO_ID);	    // Ativa clock do periférico no PMC
 	LED_PIO->PIO_PER    = LED_PIN_MASK;           // Ativa controle do pino no PIO    (PIO ENABLE register)
@@ -412,6 +434,45 @@ void TC1_Handler(void){
 	}
 
 }
+void build_post(uint8_t *buff, char *route, char *query) {
+
+	// Get content length
+	static uint8_t content_length[20] = {0};
+	sprintf(content_length, "%lu", strlen(query));
+
+	sprintf(buff,"%s %s %s%s%s%s%s","POST",route,POST_SUFIX,content_length,HTTP_END,HTTP_END,query);
+
+	printf("%s\n", buff);
+}
+void but_Handler(){
+	uint32_t pioIntStatus;
+	pioIntStatus =  pio_get_interrupt_status(BUT_PIO);
+	printf("enviou\n");
+	
+	memset(gau8PostBuffer, 0, sizeof(gau8PostBuffer));
+	sprintf((char *)gau8PostBuffer, "%s", MAIN_PREFIX_BUFFER);
+	printf("\n");
+	
+	if(connectedON){
+		printf("send \n");
+		//send(tcp_client_socket, gau8PostBuffer, strlen((char *)gau8PostBuffer), 0);
+		//memset(gau8PostBuffer, 0, MAIN_WIFI_M2M_BUFFER_SIZE);
+		//recv(tcp_client_socket, &gau8PostBuffer[0], MAIN_WIFI_M2M_BUFFER_SIZE, 0);
+		build_post(gau8PostBuffer, "/temperatures", "temp=Esta tudo bem");
+		
+
+	}
+}
+
+void but_init(void){
+
+	pmc_enable_periph_clk(BUT_PIO_ID);
+	pio_set_input(BUT_PIO, BUT_PIN_MASK, PIO_PULLUP | PIO_DEBOUNCE);
+	pio_enable_interrupt(BUT_PIO, BUT_PIN_MASK);
+	pio_handler_set(BUT_PIO, BUT_PIO_ID, BUT_PIN_MASK, PIO_IT_RISE_EDGE, but_Handler);
+	NVIC_EnableIRQ(BUT_PIO_ID);
+	NVIC_SetPriority(BUT_PIO_ID, 1);
+};
 /**
 * converte valor lido do ADC para temperatura em graus celsius
 * input : ADC reg value
@@ -469,16 +530,7 @@ void ligaLEDamarelo(){
 	LEDAmarelo_PIO->PIO_SODR = (LEDAmarelo_PIN_MASK);
 }
 
-void build_post(uint8_t *buff, char *route, char *query) {
 
-	// Get content length
-	static uint8_t content_length[20] = {0};
-	sprintf(content_length, "%lu", strlen(query));
-
-	sprintf(buff,"%s %s %s%s%s%s%s","POST",route,POST_SUFIX,content_length,HTTP_END,HTTP_END,query);
-
-	printf("%s\n", buff);
-}
 /**
 * \brief Main application function.
 *
@@ -513,6 +565,10 @@ int main(void)
 
 	/* Initialize the BSP. */
 	nm_bsp_init();
+	
+	/* Inicializa Botao */
+	but_init();	
+	butConfig();
 	
 	/*Inicializando os LEDs com seus valores iniciais*/
 	ledConfig(0);
@@ -592,7 +648,7 @@ int main(void)
 	while(1){
 		m2m_wifi_handle_events(NULL);
 		
-		build_post(gau8PostBuffer, "/temperatures", "temp=Shalom");
+
 		if(is_conversion_done == true) {
 			is_conversion_done = false;
 			int temperatura =(int)convert_adc_to_temp(g_ul_value);
@@ -602,63 +658,58 @@ int main(void)
 			printf("T3 : %d  \r\n", globalTemp3);			
 		
 			
-			/*
+			
 			if (temperatura<=globalTemp1)
 			{
 				ligaLEDverde();
 				desligaLEDvermelho();
 				desligaLEDamarelo();
-				build_post(gau8PostBuffer, "/temp1", "temp=Esta tudo bem");
+				build_post(gau8PostBuffer, "/temperatures", "temp=Esta tudo bem");
+				
 			}
-			else if(temperatura<globalTemp2)
+			else if(temperatura<=globalTemp2)
 			{
+				printf("AMARELO !! \n");
 				desligaLEDvermelho();
-				desligaLEDverde();
+				ligaLEDverde();
 				ligaLEDamarelo();
-				build_post(gau8PostBuffer, "/temp1", "temp=Cara, fique atento!");
+				build_post(gau8PostBuffer, "/temperatures","temp=Cara, fique atento!");
+				
 			}
-			else if (temperatura ==globalTemp3){
-				ligaLEDvermelho();
-				desligaLEDverde();
-				desligaLEDamarelo();
-				build_post(gau8PostBuffer, "/temp1", "temp=TÁ QUENTE!!!!!");
-			}
+		
 			else
 			{	
+				printf("VERMELHO !! \n");
 				piscaLEDvermelho();
-				desligaLEDverde();
-				desligaLEDamarelo();
-				build_post(gau8PostBuffer, "/temp1", "temp=SALVE-SE QUEM PUDER!!!!!");
+				ligaLEDverde();
+				ligaLEDamarelo();
+				build_post(gau8PostBuffer, "/temperatures", "temp=SALVE-SE QUEM PUDER!!!!!");
+				
 			}
+		}
 			
-		}
-		*/
-		
-		
-		if (wifi_connected == M2M_WIFI_CONNECTED) {
-			/* Open client socket. */
-			if (tcp_client_socket < 0) {
-				printf("socket init \n");
-				if ((tcp_client_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-					printf("main: failed to create TCP client socket error!\r\n");
-					continue;
-				}
+			if (wifi_connected == M2M_WIFI_CONNECTED) {
+				/* Open client socket. */
+				if (tcp_client_socket < 0) {
+					printf("socket init \n");
+					if ((tcp_client_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+						printf("main: failed to create TCP client socket error!\r\n");
+						continue;
+					}
 
-				/* Connect server */
-				printf("socket connecting\n");
-				
-				if (connect(tcp_client_socket, (struct sockaddr *)&addr_in, sizeof(struct sockaddr_in)) != SOCK_ERR_NO_ERROR) {
-					close(tcp_client_socket);
-					tcp_client_socket = -1;
-					printf("error\n");
-					}else{
-					gbTcpConnection = true;
+					/* Connect server */
+					printf("socket connecting\n");
+					
+					if (connect(tcp_client_socket, (struct sockaddr *)&addr_in, sizeof(struct sockaddr_in)) != SOCK_ERR_NO_ERROR) {
+						close(tcp_client_socket);
+						tcp_client_socket = -1;
+						printf("error\n");
+						}else{
+						gbTcpConnection = true;
+					}
 				}
-				
-			}
+			}	
 		}
-	}
-	
 	return 0;
 }
 

@@ -169,7 +169,6 @@ static uint8_t wifi_connected;
 /** Server host name. */
 static char server_host_name[] = MAIN_SERVER_NAME;
 
-uint8_t stop = 0;
 //Variavéis que salvam minha temperaturas
 uint8_t globalTemp1= 34;
 uint8_t globalTemp2= 36;
@@ -177,6 +176,7 @@ uint8_t globalTemp3= 37;
 uint8_t connectedON = false;
 
 char valor [5];
+uint8_t stop = 0;
 uint8_t recveivedOk = false;
 /**
  * \brief Configure UART console.

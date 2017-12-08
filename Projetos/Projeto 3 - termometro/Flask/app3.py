@@ -36,7 +36,7 @@ def submittemp():
             writer = csv.DictWriter(inFile, fieldnames=fieldtemp)
 
             # writerow() will write a row in your csv file
-            writer.writerow({'greent': green, 'yellowt': yellow, 'redt':red})
+            writer.writerow({'greent': '{:02d}'.format(int(green)), 'yellowt':'{:02d}'.format(int(yellow)), 'redt':'{:02d}'.format(int(red))})
 
         # And you return a text or a template, but if you don't return anything
         # this code will never work.
@@ -52,7 +52,7 @@ def leitura():
 	page =''
 	while True:
 		read_data = open_read.readline()
-		page += '<p>%s</p>' % read_data
+		page += '<p>temp:%s</p>' % read_data
 		mylist = page.split(',')
 		if open_read.readline() == '':
 			break
@@ -60,19 +60,20 @@ leitura()
 @app.route("/temp1")
 def temp1():
 	leitura()
-	return mylist[0] 
+	return mylist[0]
 @app.route("/temp2")
 def temp2():
 	leitura()
-	return mylist[1] 
+	return mylist[1]
 @app.route("/temp3")
 def temp3():
 	leitura()
-	return mylist[2] 
+	return mylist[2]
 @app.route("/temperatures")
 def temperatures():
-	return page  
+    leitura()
+    return page
 	#api.add_resource(index, '/')
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',debug=True)  
+    app.run(host='0.0.0.0',debug=True)
     #app.run(debug=True)
